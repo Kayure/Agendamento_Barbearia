@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\Blade;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -23,6 +24,11 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        Blade::component('components.datalist.datalist-cursos', 'datalistCursos');
+        Blade::component('components.datalist.datalist-alunos', 'datalistAlunos');
+        Blade::component('components.datalist.datalist-disciplinas', 'datalistDisciplinas');
+        Blade::component('components.datalist.datalist-docencias', 'datalistDocencias');
+        Blade::component('components.datalist.datalist-eixos', 'datalistEixos');
+        Blade::component('components.datalist.datalist-professores', 'datalistProfessores');
     }
 }

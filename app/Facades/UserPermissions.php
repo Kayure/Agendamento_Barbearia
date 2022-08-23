@@ -14,13 +14,14 @@ class UserPermissions {
         foreach($perm as $item) {
             $sess[$item->regra] = (boolean) $item->permissao;
         }
-
         session(['user_permissions' => $sess]);
     }
 
     public static function isAuthorized($rule) { 
         
         $permissions = session('user_permissions');
+        
+
         return $permissions[$rule];
     }
 

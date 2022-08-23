@@ -12,16 +12,19 @@ use App\Models\Docencia;
 class DocenciaController extends Controller
 {
 
+
     public function index()
     {
 
-        $cursos  = Curso::all();
+        
+        $cursos  = Curso::with(['eixo']);
 
-        $disciplinas = Disciplina::all();
+        $disciplinas = Disciplina::with(['curso'])
+            ->orderBy('curso_id')->orderBy('id')->get();
 
-        $professores = Professor::orderBy('id')->get();
+        $profs = Professor::orderBy('id')->get();
 
-        return view('docencias.index', compact(['professores', 'disciplinas', 'cursos']));
+        return view('docencias.index', compact(['profs', 'disciplinas', 'cursos']));
     }
 
     public function create(Request $request)
@@ -31,9 +34,8 @@ class DocenciaController extends Controller
     public function store(Request $request)
     {
 
-        $regras = [
+        $rules = [
             'PROFESSOR_ID_SELECTED' => 'required',
-            'DISCIPLINA_ID_SELECTED' => 'required',
         ];
         $msgs = [
             "required" => "O preenchimento do campo [:attribute] é obrigatório!",
@@ -41,29 +43,26 @@ class DocenciaController extends Controller
             "min" => "O campo [:attribute] possui tamanho mínimo de [:min] caracteres!",
         ];
 
-        $request->validate($regras, $msgs);
+        $request->validate($rules, $msgs);
 
         $ids_prof = $request->PROFESSOR_ID_SELECTED;
-        $ids_disciplina = $request->DISCIPLINA_ID_SELECTED;
+        $disciplina = $request->DISCIPLINA;
 
-        $doc = new Docencia();
 
-        for ($i = 0; $i < count($ids_prof); $i++) {
+        for ($i = 0; $i < count($request->DISCIPLINA); $i++) {
+
+            Docencia::where('disciplina_id', '=', $disciplina[$i])->where('professor_id', '=', $ids_prof[$i])->delete();
+
+            $doc = new Docencia();
+
             $doc->professor_id = $ids_prof[$i];
+            $doc->disciplina_id = $disciplina[$i];
 
-            for ($i = 0; $i < count($ids_disciplina); $i++) {
-            
-            $doc->disciplina_id = $ids_disciplina[$i];
-           
-            
-        }
             $doc->save();
         }
 
-        //O QUE TA ERRADO AQUI ?
-        
 
-        return redirect()->route('docencias.index');
+        return redirect()->route('disciplinas.index');
     }
 
 
@@ -75,7 +74,6 @@ class DocenciaController extends Controller
      */
     public function show($id)
     {
-        //
     }
 
     /**

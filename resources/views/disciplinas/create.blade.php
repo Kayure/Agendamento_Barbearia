@@ -1,14 +1,11 @@
-<!-- Herda o layout padrão definido no template "main" -->
-@extends('templates.main', ['titulo' => "Nova Disciplina"])
-<!-- Preenche o conteúdo da seção "titulo" -->
-@section('titulo') Disciplina @endsection
-<!-- Preenche o conteúdo da seção "conteudo" -->
+@extends('templates.middleware', ['titulo' => "Nova Disciplina"])
+
 @section('conteudo')
 
 <form action="{{ route('disciplinas.store') }}" method="POST">
     @csrf
     <div class="row">
-        <div class="container my-3">          
+        <div class="container my-3">
             <div class="row">
                 <div class="col">
                     <div class="form-floating mb-3">
@@ -65,16 +62,15 @@
                 </svg>
                 &nbsp; Voltar
             </a>
-            <a href="javascript:document.querySelector('form').submit();" class="btn btn-success btn-block align-content-center">
+            <button href="javascript:document.querySelector('form').submit();" class="btn btn-success btn-block align-content-center">
                 Confirmar &nbsp;
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-check-circle-fill" viewBox="0 0 16 16">
                     <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z" />
                 </svg>
-            </a>
+            </button>
         </div>
     </div>
     </div>
     </div>
 </form>
-
 @endsection

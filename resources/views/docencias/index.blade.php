@@ -1,15 +1,18 @@
-@extends('templates.main', ['titulo' => "Docencia", 'rota' => "docencias.index"])
-<!-- Preenche o conteúdo da seção "titulo" -->
-@section('titulo') Docencia @endsection
-<!-- Preenche o conteúdo da seção "conteudo" -->
-@section('conteudo')
+@extends('templates/main')
 
+@section('conteudo')
+<div class="row mb-2">
+    <div class="col">
+        <h3 class="display-7 text-secondary d-none d-md-block"><b>Docência </b></h3>
+    </div>
+</div>
 <div class="row mb-3">
     <div class="col">
-        <table class="table align-middle caption-top table-striped" id="tabela">
+        <table class="table align-middle caption-top  table-dark table-striped" id="tabela">
+
             <caption>Tabela de <b>Disciplinas / Professores</b></caption>
             <thead>
-                <tr>
+                <tr class="header-table">
                     <th scope="col" class="text-center">Disciplina</th>
                     <th scope="col" class="text-center">Professor</th>
                 </tr>
@@ -17,48 +20,32 @@
             <tbody>
                 <form action="{{ route('docencias.store') }}" method="POST">
                     @csrf
-
-                        <tr>
+                    @foreach($disciplinas as $disciplina)
+                    <tr>
+                        <td scope="col" class="text-center col-md-6 ">
+                            <div class="input-group mb-3">
+                                <input type="hidden" readonly class="form-control-plaintext" name="DISCIPLINA[]" value="{{$disciplina->id}}">
+                                {{$disciplina->nome}}
+                            </div>
+                        </td>
                         <td scope="col" class="text-center">
-                                <select name="DISCIPLINA_ID_SELECTED[]"
-                                    class="form-select @if($errors->has('DISCIPLINA_ID_SELECTED')) is-invalid @endif" class="form-control ">
-                                    @foreach ($disciplinas as $item2)                                       
-                                            <option value="{{$item2->id}}" @if($item2->id == old('disciplinas')) selected="true" @endif>
-                                                {{ $item2->nome }}
-                                            </option>
-                                        @endforeach
-
-                                    
-                                </select>
-                                @if($errors->has('DISCIPLINA_ID_SELECTED'))
-                                    <div class='invalid-feedback'>
-                                        {{ $errors->first('DISCIPLINA_ID_SELECTED') }}
-                                    </div>
-                                @endif
-                            </td>
-                            
-
-                        
-                            <td scope="col" class="text-center">
-                                <select name="PROFESSOR_ID_SELECTED[]"
-                                    class="form-select @if($errors->has('PROFESSOR_ID_SELECTED')) is-invalid @endif" class="form-control ">
-                                    @foreach ($professores as $item)
-                                        <!-- LISTA APENAS OS PROFESSORES ATIVOS -->
-                                        @if($item->ativo == 1)
-                                            <option value="{{$item->id}}" @if($item->id == old('professores')) selected="true" @endif>
-                                                {{ $item->nome }}
-                                            </option>
-                                        @endif
-                                    @endforeach
-                                </select>
-                                @if($errors->has('PROFESSOR_ID_SELECTED'))
-                                    <div class='invalid-feedback'>
-                                        {{ $errors->first('PROFESSOR_ID_SELECTED') }}
-                                    </div>
-                                @endif
-                            </td>
-                            
-                        </tr>
+                            <select name="PROFESSOR_ID_SELECTED[]" class="form-select @if($errors->has('PROFESSOR_ID_SELECTED')) is-invalid @endif" class="form-control ">
+                                @foreach ($profs as $item)
+                                    @if($item->ativo == 1)
+                                    <option value="{{$item->id}}" @if($item->id == old('profs')) selected="true" @endif>
+                                        {{ $item->nome }}
+                                    </option>
+                                    @endif
+                                @endforeach
+                            </select>
+                            @if($errors->has('PROFESSOR_ID_SELECTED'))
+                            <div class='invalid-feedback'>
+                                {{ $errors->first('PROFESSOR_ID_SELECTED') }}
+                            </div>
+                            @endif
+                        </td>
+                    </tr>
+                    @endforeach
             </tbody>
         </table>
         <div class="row">
@@ -83,8 +70,6 @@
 
     </div>
 </div>
-
-
 
 @endsection
 

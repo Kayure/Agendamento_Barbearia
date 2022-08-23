@@ -1,44 +1,74 @@
 <?php
 
 namespace App\Http\Controllers;
-use App\Models\Aluno;
+
 use App\Models\Curso;
-use App\Models\Matricula;
+use App\Models\Aluno;
+use App\Facades\UserPermissions;
 
 use Illuminate\Http\Request;
 
 class AlunoController extends Controller
 {
- 
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+
     public function index()
     {
-        $data = Aluno::with(['curso'])->get();
+        if (!UserPermissions::isAuthorized('alunos.index')) {
+            return response()->view('templates.restrito');
+        }
+        $data = Aluno::with(['curso' => function ($q) {
+            $q->withTrashed();
+        }])->orderBy('nome')->get();
 
         return view('alunos.index', compact(['data']));
     }
 
-
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function create()
     {
-        $curso = Curso::orderBy('nome')->get();
-        return view('alunos.create', compact(['curso']));
+        if (!UserPermissions::isAuthorized('alunos.create')) {
+            abort(403);
+        }
+        $cursos = Curso::orderBy('nome')->get();
+        return view('alunos.create', compact(['cursos']));
     }
 
-   
-    public function store(Request $request)
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function validation(Request $request)
     {
+
         $rules = [
             'nome' => 'required|max:100|min:10',
             'curso' => 'required',
+
         ];
 
         $msgs = [
             "required" => "O preenchimento do campo [:attribute] é obrigatório!",
             "max" => "O campo [:attribute] possui tamanho máximo de [:max] caracteres!",
             "min" => "O campo [:attribute] possui tamanho mínimo de [:min] caracteres!",
+            "unique" => "O campo [:attribute] pode ter apenas um único registro!"
         ];
 
         $request->validate($rules, $msgs);
+    }
+    public function store(Request $request)
+    {
+        Self::validation($request);
 
         $curso = Curso::find($request->curso);
 
@@ -46,7 +76,6 @@ class AlunoController extends Controller
 
             $obj = new Aluno();
             $obj->nome = mb_strtoupper($request->nome, 'UTF-8');
-            $obj->ativo = $request->radio;
             $obj->curso()->associate($curso);
 
             $obj->save();
@@ -54,34 +83,51 @@ class AlunoController extends Controller
             return redirect()->route('alunos.index');
         }
     }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
     public function show($id)
     {
-        $mat = Matricula::with(['disciplina'])
-            ->where('aluno_id', '=', $id)->distinct()->get(['disciplina_id']);
-
-        return view('alunos.show', compact(['mat']));
+        //
     }
 
-    
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
     public function edit($id)
     {
-
-        $curso = Curso::orderBy('nome')->get();
-        $data = Aluno::find($id);
-
+        if (!UserPermissions::isAuthorized('alunos.edit')) {
+            return response()->view('templates.restrito');
+        }
+        $cursos = Curso::orderBy('nome')->get();
+        $data = Aluno::with(['curso' => function ($q) {
+            $q->withTrashed();
+        }])->find($id);
 
         if (isset($data)) {
-            return view('alunos.edit', compact(['data', 'curso']));
+            return view('alunos.edit', compact(['data', 'cursos']));
         }
     }
 
-
-    
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
     public function update(Request $request, $id)
     {
         $rules = [
             'nome' => 'required|max:100|min:10',
-            'eixo' => 'required',
+            'curso' => 'required',
 
         ];
         $msgs = [
@@ -99,7 +145,7 @@ class AlunoController extends Controller
 
             $obj_aluno->nome = mb_strtoupper($request->nome, 'UTF-8');
             $obj_aluno->curso()->associate($curso);
-            $obj_aluno->ativo = $request->radio;
+
             $obj_aluno->save();
 
 
@@ -107,15 +153,14 @@ class AlunoController extends Controller
         }
     }
 
-   
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
     public function destroy($id)
     {
-        $obj = Aluno::find($id);
-
-        if (isset($obj)) {
-            $obj->delete();
-        } 
-
-        return redirect()->route('alunos.index');
+        //
     }
 }

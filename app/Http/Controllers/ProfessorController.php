@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Facades\UserPermissions;
 use Illuminate\Http\Request;
 use App\Models\Professor;
 use App\Models\Eixo;
+use App\Models\Docencia;
 
-use function PHPUnit\Framework\isNull;
 
 class ProfessorController extends Controller
 {
@@ -14,14 +15,21 @@ class ProfessorController extends Controller
     public function index()
     {
 
-        $data = Professor::with(['eixo'])
-        ->orderBy('nome')->get();
+        if(!UserPermissions::isAuthorized('professores.index')) {
+            return response()->view('templates.restrito');
+        }
+        $data = Professor::with(['eixo' => function ($q) {
+            $q->withTrashed();
+        }])->orderBy('nome')->get();
 
         return view('professores.index', compact(['data']));
     }
 
     public function create()
     {
+        if(!UserPermissions::isAuthorized('professores.create')) {
+            abort(403);
+        }
         $eixos = Eixo::orderBy('nome')->get();
         return view('professores.create', compact(['eixos']));
     }
@@ -29,10 +37,10 @@ class ProfessorController extends Controller
     public function validation(Request $request)
     {
 
-        $regras = [
+        $rules = [
             'nome' => 'required|max:100|min:10',
-            'email' => 'required|max:250|min:15|unique:professores',
-            'siape' => 'required|max:10|min:8|unique:professores',
+            'email' => 'required|max:250|min:15|unique:professors',
+            'siape' => 'required|max:10|min:8',
             'eixo' => 'required',
             'radio' => 'required',
 
@@ -45,7 +53,7 @@ class ProfessorController extends Controller
             "unique" => "O campo [:attribute] pode ter apenas um único registro!"
         ];
 
-        $request->validate($regras, $msgs);
+        $request->validate($rules, $msgs);
     }
 
     public function store(Request $request)
@@ -62,16 +70,23 @@ class ProfessorController extends Controller
             $obj->email = mb_strtolower($request->email, 'UTF-8');
             $obj->siape = $request->siape;
             $obj->ativo = $request->radio;
-
-
             $obj->eixo()->associate($eixo);
+
             $obj->save();
+
             return redirect()->route('professores.index');
         }
     }
 
     public function show($id)
     {
+        if(!UserPermissions::isAuthorized('professores.show')) {
+            return response()->view('templates.restrito');
+        }
+
+        $doc = Docencia::with(['professor', 'disciplina'])->get();
+
+        return view('professores.show', compact(['doc']));
     }
 
     public function edit($id)
@@ -82,7 +97,6 @@ class ProfessorController extends Controller
             $q->withTrashed();
         }])->find($id);
 
-
         if (isset($data)) {
             return view('professores.edit', compact(['data', 'eixos']));
         }
@@ -92,12 +106,12 @@ class ProfessorController extends Controller
     {
 
 
-        $regras = [
-            'nome' => 'required|max:100|min:5',
-            'email' => 'required',
-            'siape' => 'required',
-            'radio' => 'required',
+        $rules = [
+            'nome' => 'required|max:100|min:10',
+            'email' => 'required|max:250|min:15|',
+            'siape' => 'required|max:10|min:8',
             'eixo' => 'required',
+            'radio' => 'required',
 
         ];
         $msgs = [
@@ -106,19 +120,19 @@ class ProfessorController extends Controller
             "min" => "O campo [:attribute] possui tamanho mínimo de [:min] caracteres!",
         ];
 
-        $request->validate($regras, $msgs);
+        $request->validate($rules, $msgs);
 
         $eixo = Eixo::find($request->eixo);
         $obj_prof = Professor::find($id);
 
         if (isset($eixo) && isset($obj_prof)) {
 
-            //PREENCHE OS CAMPOS COM OS DADOS DO PROFESSOR SELECIONADO
             $obj_prof->nome = mb_strtoupper($request->nome, 'UTF-8');
             $obj_prof->email = mb_strtolower($request->email, 'UTF-8');
             $obj_prof->siape = $request->siape;
             $obj_prof->ativo = $request->radio;
             $obj_prof->eixo()->associate($eixo);
+
             $obj_prof->save();
 
 
@@ -128,16 +142,5 @@ class ProfessorController extends Controller
 
     public function destroy($id)
     {
-        $obj = Professor::find($id);
-
-        if (isset($obj)) {
-            $obj->delete();
-        } else {
-            $msg = "Professor";
-            $link = "professores.index";
-            return view('erros.id', compact(['msg', 'link']));
-        }
-
-        return redirect()->route('professores.index');
     }
 }

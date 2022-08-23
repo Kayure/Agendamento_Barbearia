@@ -26,6 +26,7 @@ class GoogleAuthController extends Controller
                     'name' => $google_user->getName(),
                     'email' => $google_user->getEmail(),
                     'google_id' => $google_user->getId(),
+                    'type_id' => 1,
                 ]);
 
                 Auth::login($new_user);

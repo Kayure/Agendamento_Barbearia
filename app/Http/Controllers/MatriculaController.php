@@ -2,54 +2,62 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Curso;
-use Illuminate\Http\Request;
-use App\Models\Disciplina;
-use App\Models\Docencia;
 use App\Models\Aluno;
+use App\Models\Disciplina;
 use App\Models\Matricula;
-
-
+use Illuminate\Http\Request;
 
 class MatriculaController extends Controller
 {
 
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function index()
     {
-        
-       
     }
 
-    public function create($id)
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create()
     {
-        $disciplinas = Disciplina::all();
-        $aluno = Aluno::with(['disciplina'])->get()->find($id);
-
-        return view('matriculas.create', compact(['disciplinas','aluno']));
+        //
     }
 
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(Request $request)
+    {
+        $id_aluno = $request->aluno;
+        $disciplina = $request->disciplina;
 
-    public function store(Request $request){
-        $aluno = Aluno::find($request->aluno_id);
-        $aluno->disciplina()->detach();
 
-        if(isset($request['disciplina_id'])) {
-            foreach($request['disciplina_id'] as $item) {
-                $disciplina = Disciplina::find($item);    
-                if(isset($disciplina)){
+        if (isset($disciplina)) {
+            for ($i = 0; $i < count($request->disciplina); $i++) {
 
-                    //CRIANDO A NOVA MATRICULA
-                    $matricula = new Matricula();
-                    $matricula->aluno()->associate($aluno);
-                    $matricula->disciplina()->associate($disciplina);
-                    $matricula->save();
-                }
+                Matricula::where('disciplina_id', '=', $disciplina[$i])->where('aluno_id', '=', $id_aluno)->delete();
+
+                $doc = new Matricula();
+
+                $doc->aluno_id = $id_aluno;
+                $doc->disciplina_id = $disciplina[$i];
+
+                $doc->save();
             }
         }
-        
-        return view('matriculas.index', compact(['aluno']));
-    }
 
+
+        return redirect()->route('alunos.index');
+    }
 
     /**
      * Display the specified resource.
@@ -57,16 +65,15 @@ class MatriculaController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-
-
-    //FUNÇÃO PARA ABRIR AS MATRICULAS
     public function show($id)
     {
-        
-        $aluno = Aluno::with(['disciplina'])->get()->find($id);
-        
 
-        return view('matriculas.index', compact(['aluno']));
+        $disciplinas = Disciplina::with(['curso'])
+            ->orderBy('curso_id')->orderBy('id')->get();
+
+        $aluno = Aluno::find($id);
+
+        return view('matriculas.index', compact(['aluno', 'disciplinas']));
     }
 
     /**
@@ -89,7 +96,7 @@ class MatriculaController extends Controller
      */
     public function update(Request $request, $id)
     {
-        
+        //
     }
 
     /**
@@ -102,28 +109,4 @@ class MatriculaController extends Controller
     {
         //
     }
-
-
-    public function listar($id) {
-
-        //É ASSIM QUE PASSA UAS TABELAS ?
-        // $aluno = Aluno::with(['disciplina'],['eixo'])->get()->find($id);
-        
-
-        // return view('matriculas.index', compact(['aluno'],['eixo']));
-    }
-
-
-
-    //FUNÇÃO PARA ADICIONAR UMA MATRICULA
-    public function add($id)
-    {
-        $disciplinas = Disciplina::all();
-        $aluno = Aluno::with(['disciplina'])->get()->find($id);
-
-        return view('matriculas.add', compact(['disciplinas','aluno']));
-
-    }
-
-    
 }

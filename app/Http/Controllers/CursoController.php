@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Curso;
 use App\Models\Eixo;
+use App\Facades\UserPermissions;
 
 class CursoController extends Controller
 {
@@ -13,12 +14,15 @@ class CursoController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
     public function index()
     {
-        $data = Curso::with(['eixo'])
-        ->orderBy('nome')->get();
-
-        
+        if(!UserPermissions::isAuthorized('cursos.index')) {
+            return response()->view('templates.restrito');
+        }
+        $data = Curso::with(['eixo' => function ($q) {
+            $q->withTrashed();
+        }])->orderBy('nome')->get();
 
         return view('cursos.index', compact(['data']));
     }
@@ -30,6 +34,9 @@ class CursoController extends Controller
      */
     public function create()
     {
+        if(!UserPermissions::isAuthorized('cursos.create')) {
+            return response()->view('templates.restrito');
+        }
         $eixos = Eixo::orderBy('nome')->get();
         return view('cursos.create', compact(['eixos']));
     }
@@ -78,8 +85,9 @@ class CursoController extends Controller
         if (isset($data)) {
             return view('cursos.edit', compact(['data', 'eixos']));
         } else {
-           
-            return view('cursos.index');
+            $msg = "Curso";
+            $link = "curso.index";
+            return view('erros.id', compact(['msg', 'link']));
         }
     }
 
@@ -93,9 +101,9 @@ class CursoController extends Controller
     public function update(Request $request, $id)
     {
 
-        $regras = [
+        $rules = [
             'nome' => 'required|max:50|min:10',
-            'sigla' => 'required|max:8|min:2',
+            'sigla' => 'required|max:8,|min:2',
             'tempo' => 'required|max:2|min:1',
             'eixo' => 'required',
 
@@ -106,12 +114,10 @@ class CursoController extends Controller
             "min" => "O campo [:attribute] possui tamanho mínimo de [:min] caracteres!",
         ];
 
-        $request->validate($regras, $msgs);
+        $request->validate($rules, $msgs);
 
         $eixo = Eixo::find($request->eixo);
         $obj = Curso::find($id);
-
-        //PREENCHE OS CAMPOS COM OS DADOS DO CURSO SELECIONADO
         if (isset($eixo) && isset($obj)) {
             $obj->nome = mb_strtoupper($request->nome, 'UTF-8');
             $obj->sigla = mb_strtoupper($request->sigla, 'UTF-8');
@@ -121,8 +127,9 @@ class CursoController extends Controller
             return redirect()->route('cursos.index');
         }
 
-        
-        return view('cursos.index');
+        $msg = "Curso ou Eixo/Área";
+        $link = "cursos.index";
+        return view('erros.id', compact(['msg', 'link']));
     }
 
     /**
@@ -133,6 +140,9 @@ class CursoController extends Controller
      */
     public function destroy($id)
     {
+        if(!UserPermissions::isAuthorized('disciplinas.destroy')) {
+            return response()->view('templates.restrito');
+        }
         $obj = Curso::find($id);
 
         if (isset($obj)) {
@@ -140,7 +150,7 @@ class CursoController extends Controller
         } else {
             $msg = "Curso";
             $link = "cursos.index";
-            return view('cursos.index');
+            return view('erros.id', compact(['msg', 'link']));
         }
 
         return redirect()->route('cursos.index');
