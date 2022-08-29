@@ -17,13 +17,18 @@
         rel="stylesheet" />
     <!-- Core theme CSS (includes Bootstrap)-->
     <link href="css/styles.css" rel="stylesheet" />
+    <!-- Inclusao do Full Calendar-->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.css">
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/locales-all.js"></script>
+
 </head>
 
 <body id="page-top">
     <!-- Navigation-->
     <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
         <div class="container px-4 px-lg-5">
-            <a class="navbar-brand" href="#page-top">Seu Pedro</a>
+            <a class="navbar-brand text-white" href="#page-top">Seu Pedro</a>
             <button class="navbar-toggler navbar-toggler-right" type="button" data-bs-toggle="collapse"
                 data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false"
                 aria-label="Toggle navigation">
@@ -33,10 +38,10 @@
             <div class="collapse navbar-collapse" id="navbarResponsive">
                 <ul class="navbar-nav ms-auto">
                     {{-- <li class="nav-item"><a class="nav-link" href="#about">Endereço</a></li> --}}
-                    <li class="nav-item"><a class="nav-link" href="#adress">Endereço</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#projects">Sobre</a></li>
+                    <li class="nav-item "><a class="nav-link text-white" href="#adress">Endereço</a></li>
+                    <li class="nav-item"><a class="nav-link text-white" href="#projects">Sobre</a></li>
 
-                    <li class="nav-item"><a class="nav-link" href="#contact">Contato</a></li>
+                    <li class="nav-item"><a class="nav-link text-white" href="#contact">Contato</a></li>
                 </ul>
             </div>
         </div>
@@ -67,7 +72,7 @@
                             <i class="fa fa-scissors fa-stack-1x fa-inverse"></i>
                         </span>
 
-                        <h4 class="my-3">Cortes</h4>
+                        <h4 class="my-3 text-white-50" >Cortes</h4>
                         <p class="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minima maxime
                             quam architecto quo inventore harum ex magni, dicta impedit.</p>
 
@@ -78,7 +83,7 @@
                             <i class="far fa-clock fa-stack-1x fa-inverse"></i>
                         </span>
 
-                        <h4 class="my-3">Funcionamento</h4>
+                        <h4 class="my-3 text-white-50">Funcionamento</h4>
                         <p class="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minima maxime
                             quam architecto quo inventore harum ex magni, dicta impedit.</p>
 
@@ -89,7 +94,7 @@
                             <i class="fas fa-search-location fa-stack-1x fa-inverse"></i>
                         </span>
 
-                        <h4 class="my-3">Estabecimento</h4>
+                        <h4 class="my-3 text-white-50">Estabecimento</h4>
                         <p class="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minima maxime
                             quam architecto quo inventore harum ex magni, dicta impedit.</p>
 

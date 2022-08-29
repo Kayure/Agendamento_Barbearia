@@ -43,6 +43,9 @@ Route::get('auth/google/call-back', [GoogleAuthController::class, 'callbackGoogl
 Route::get('auth/facebook', [FaceBookController::class,'redirect'])->name('facebook-auth');
 Route::get('auth/facebook/call-back', [FaceBookController::class, 'callbackFacebook']);
 
+//Rota calendario
+Route::get('/evento', [\App\Http\Controllers\EventoController::class, 'index']);
+
 Route::get('/testfacade', function () {
     return UserPermissions::test();
 });
