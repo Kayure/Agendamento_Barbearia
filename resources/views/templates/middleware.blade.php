@@ -7,9 +7,22 @@
 
         <!-- Define uma seção "titulo" -->
         <title>Barbearia Seu Pedro  @yield('titulo')</title>
+        <link rel="icon" type="image/x-icon" href="img/favicon.png" />
 
         <!-- Bootstrap 5 / CSS -->
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+        <link href='css/core/main.min.css' rel='stylesheet' />
+        <link href='css/daygrid/main.min.css' rel='stylesheet' />
+        <script src='js/core/main.min.js'></script>
+        <script src='js/interaction/main.min.js'></script>
+        <script src='js/daygrid/main.min.js'></script>
+        <script src='js/core/locales/pt-br.js'></script>
+
+        <!-- Inclusao do Full Calendar-->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.css">
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/locales-all.js"></script>
+
 
 
     </head>
@@ -18,10 +31,10 @@
         <nav class="navbar sticky-top navbar-expand-md navbar-dark bg-dark">
             <div class="container-fluid">
                 <a href="{{route('dashboard')}}" class="navbar-brand ms-sm-3">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" fill="currentColor" class="bi bi-book-half" viewBox="0 0 16 16">
-                        <path d="M8.5 2.687c.654-.689 1.782-.886 3.112-.752 1.234.124 2.503.523 3.388.893v9.923c-.918-.35-2.107-.692-3.287-.81-1.094-.111-2.278-.039-3.213.492V2.687zM8 1.783C7.015.936 5.587.81 4.287.94c-1.514.153-3.042.672-3.994 1.105A.5.5 0 0 0 0 2.5v11a.5.5 0 0 0 .707.455c.882-.4 2.303-.881 3.68-1.02 1.409-.142 2.59.087 3.223.877a.5.5 0 0 0 .78 0c.633-.79 1.814-1.019 3.222-.877 1.378.139 2.8.62 3.681 1.02A.5.5 0 0 0 16 13.5v-11a.5.5 0 0 0-.293-.455c-.952-.433-2.48-.952-3.994-1.105C10.413.809 8.985.936 8 1.783z" />
-                    </svg>
-                    <span class="ms-3 fs-5">IFPR - Instituto Federal do Paraná</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="36" height="3 6" fill="currentColor" class="bi bi-scissors" viewBox="0 0 16 16">
+                        <path d="M3.5 3.5c-.614-.884-.074-1.962.858-2.5L8 7.226 11.642 1c.932.538 1.472 1.616.858 2.5L8.81 8.61l1.556 2.661a2.5 2.5 0 1 1-.794.637L8 9.73l-1.572 2.177a2.5 2.5 0 1 1-.794-.637L7.19 8.61 3.5 3.5zm2.5 10a1.5 1.5 0 1 0-3 0 1.5 1.5 0 0 0 3 0zm7 0a1.5 1.5 0 1 0-3 0 1.5 1.5 0 0 0 3 0z"/>
+                      </svg>
+                    <span class="ms-3 fs-5">Seu Pedro - Agendamentos </span>
                 </a>
                 <button class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#itens">
                     <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-menu-button-wide" viewBox="0 0 16 16">
@@ -51,39 +64,39 @@
                                 <path fill-rule="evenodd" d="m8 3.293 6 6V13.5a1.5 1.5 0 0 1-1.5 1.5h-9A1.5 1.5 0 0 1 2 13.5V9.293l6-6zm5-.793V6l-2-2V2.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5z" />
                                 <path fill-rule="evenodd" d="M7.293 1.5a1 1 0 0 1 1.414 0l6.647 6.646a.5.5 0 0 1-.708.708L8 2.207 1.354 8.854a.5.5 0 1 1-.708-.708L7.293 1.5z" />
                                 </svg>
-                                <span class="ps-1 text-white">Professores</span>
+                                <span class="ps-1 text-white">Barbeiros</span>
 
                             </a>
                             <ul class="dropdown-menu">
-                                <li><a href="{{route('professores.index')}}" class="dropdown-item">Professores</a></li>
-                                <li><a href="{{route('disciplinas.index')}}" class="dropdown-item">Disciplinas</a></li>
+                                <li><a href="{{route('professores.index')}}" class="dropdown-item">Pedro</a></li>
+                                <li><a href="{{route('disciplinas.index')}}" class="dropdown-item">Fulano</a></li>
 
 
                             </ul>
                         </li>
                         <li class="nav-item dropdown ps-2">
                             <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-calendar-check" viewBox="0 0 16 16">
-                                    <path d="M10.854 7.146a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L7.5 9.793l2.646-2.647a.5.5 0 0 1 .708 0z" />
-                                    <path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5zM1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4H1z" />
-                                </svg>
-                                <span class="ps-1 text-white">Docencia</span>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-gear-fill" viewBox="0 0 16 16">
+                                    <path d="M9.405 1.05c-.413-1.4-2.397-1.4-2.81 0l-.1.34a1.464 1.464 0 0 1-2.105.872l-.31-.17c-1.283-.698-2.686.705-1.987 1.987l.169.311c.446.82.023 1.841-.872 2.105l-.34.1c-1.4.413-1.4 2.397 0 2.81l.34.1a1.464 1.464 0 0 1 .872 2.105l-.17.31c-.698 1.283.705 2.686 1.987 1.987l.311-.169a1.464 1.464 0 0 1 2.105.872l.1.34c.413 1.4 2.397 1.4 2.81 0l.1-.34a1.464 1.464 0 0 1 2.105-.872l.31.17c1.283.698 2.686-.705 1.987-1.987l-.169-.311a1.464 1.464 0 0 1 .872-2.105l.34-.1c1.4-.413 1.4-2.397 0-2.81l-.34-.1a1.464 1.464 0 0 1-.872-2.105l.17-.31c.698-1.283-.705-2.686-1.987-1.987l-.311.169a1.464 1.464 0 0 1-2.105-.872l-.1-.34zM8 10.93a2.929 2.929 0 1 1 0-5.86 2.929 2.929 0 0 1 0 5.858z"/>
+                                  </svg>
+                                <span class="ps-1 text-white">Configurações</span>
 
                             </a>
                             <ul class="dropdown-menu">
 
                                 <li><a href="{{route('docencias.index')}}" class="dropdown-item">Disciplina / Professor </a></li>
-                                <li><a href="{{route('alunos.index')}}" class="dropdown-item">Alunos</a></li>
+                                <li><a href="{{route('alunos.index')}}" class="dropdown-item">Cortes e Servicos</a></li>
 
                             </ul>
                         </li>
                         <li class="nav-item dropdown ps-2">
                             <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-mortarboard-fill" viewBox="0 0 16 16">
-                                    <path d="M8.211 2.047a.5.5 0 0 0-.422 0l-7.5 3.5a.5.5 0 0 0 .025.917l7.5 3a.5.5 0 0 0 .372 0L14 7.14V13a1 1 0 0 0-1 1v2h3v-2a1 1 0 0 0-1-1V6.739l.686-.275a.5.5 0 0 0 .025-.917l-7.5-3.5Z" />
-                                    <path d="M4.176 9.032a.5.5 0 0 0-.656.327l-.5 1.7a.5.5 0 0 0 .294.605l4.5 1.8a.5.5 0 0 0 .372 0l4.5-1.8a.5.5 0 0 0 .294-.605l-.5-1.7a.5.5 0 0 0-.656-.327L8 10.466 4.176 9.032Z" />
-                                </svg>
-                                <span class="ps-1 text-white">Academico</span>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-coin" viewBox="0 0 16 16">
+                                    <path d="M5.5 9.511c.076.954.83 1.697 2.182 1.785V12h.6v-.709c1.4-.098 2.218-.846 2.218-1.932 0-.987-.626-1.496-1.745-1.76l-.473-.112V5.57c.6.068.982.396 1.074.85h1.052c-.076-.919-.864-1.638-2.126-1.716V4h-.6v.719c-1.195.117-2.01.836-2.01 1.853 0 .9.606 1.472 1.613 1.707l.397.098v2.034c-.615-.093-1.022-.43-1.114-.9H5.5zm2.177-2.166c-.59-.137-.91-.416-.91-.836 0-.47.345-.822.915-.925v1.76h-.005zm.692 1.193c.717.166 1.048.435 1.048.91 0 .542-.412.914-1.135.982V8.518l.087.02z"/>
+                                    <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                                    <path d="M8 13.5a5.5 5.5 0 1 1 0-11 5.5 5.5 0 0 1 0 11zm0 .5A6 6 0 1 0 8 2a6 6 0 0 0 0 12z"/>
+                                  </svg>
+                                <span class="ps-1 text-white">Financeiro </span>
 
                             </a>
 
@@ -114,6 +127,35 @@
                 </div>
             </div>
         </nav>
+
+{{-- INCIALIZAÇÃO DO CALENDARIO --}}
+       <div class="container">
+            <div id="agenda">
+            </div>
+
+
+<style>
+
+    body {
+        margin: 40px 10px;
+        padding: 0;
+        font-family: Arial, Helvetica Neue, Helvetica, sans-serif;
+        font-size: 14px;
+    }
+
+    #agenda {
+        max-width: 900px;
+        margin: 0 auto;
+    }
+
+</style>
+        <div id='calendar'></div>
+
+
+        <form>
+            {{-- <input type="datetime-local" name="data_saida" id="data_saida" value="" class="form-control" aria-label="" aria-describedby="inputGroup-sizing-sm"> --}}
+
+        </form>
         <div class="container py-4">
             <div class="row">
                 <div class="col">
@@ -194,6 +236,8 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
     <!-- JQuery / JS -->
     <script src="{{ asset('js/jquery-3.6.0.min.js') }}"></script>
+     <!-- Agenda / JS -->
+    <script src="{{ asset('js/agenda.js')}}"defer>  </script>
 
     <script type="text/javascript">
 

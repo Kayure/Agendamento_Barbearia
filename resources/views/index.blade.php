@@ -1,13 +1,12 @@
 @extends('templates/main')
 
 @section('conteudo')
-            
-@endsection
 
-@section('script')
+<div class="container">
+    <div id="agenda"> </div>
 
-    <script type="text/javascript">
+        calendario
 
-    </script>
+</div>
 
 @endsection
