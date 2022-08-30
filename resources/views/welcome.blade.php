@@ -54,7 +54,7 @@
                     <!-- <h1 class="mx-auto my-0 text-uppercase">Seu Pedro</h1> -->
                     <img viewBox="0 0 316 316" class="w-30 h-23 fill-current text-gray-500" src="img/LOGO.png"
                         width="450" height="450">
-                    <h2 class="text-white-50 mx-auto mt-2 mb-5">O RESGATE DO CORTE COM ESTILO.</h2>
+                    <h2 class="text-white-50 mx-auto mt-2 mb-5">PRESTE ATENÇÃO AOS DETALHES QUE OS OUTROS NEGLIGENCIAM.</h2>
                     <a class="btn btn-light" href="{{ url('/dashboard') }}">Agendar Horário</a>
                     {{-- <a class="btn btn-primary" href="{{ route('login') }}">Entrar</a> --}}
                 </div>

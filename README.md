@@ -1,3 +1,13 @@
+SUGESTOES 
+- Colocar tabela de preço, sugestão : https://barbeariaclube.com.br/
+- enviar referencias de "Relatos de clientes" (comentarios google)
+foto para colocar no site: https://www.instagram.com/p/CC3Te58AHC0/?utm_source=ig_web_copy_link  segunda foto
+
+
+
+
+
+
 <p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400"></a></p>
 
 <p align="center">
