@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class Servico extends Migration
+class CreateServicosTable extends Migration
 {
     /**
      * Run the migrations.
@@ -15,9 +15,11 @@ class Servico extends Migration
     {
         Schema::create('servicos', function (Blueprint $table) {
             $table->id();
-            $table->timestamps();
             $table->string('nome');
             $table->string('valor');
+
+            $table->softDeletes();
+            $table->timestamps();
         });
     }
 

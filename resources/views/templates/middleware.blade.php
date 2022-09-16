@@ -51,13 +51,7 @@
 
             </button>
 
-            {{-- <ul class="dropdown-menu">
-                    <li><a href="{{route('alunos.index')}}" class="dropdown-item">Alunos</a></li>
-                    <li><a href="{{route('cursos.index')}}" class="dropdown-item">Cursos</a></li>
-                    <li><a href="{{route('disciplinas.index')}}" class="dropdown-item">Disciplinas</a></li>
-                    <li><a href="{{route('eixos.index')}}" class="dropdown-item">Eixos</a></li>
-                    <li><a href="{{route('professores.index')}}" class="dropdown-item">Professores</a></li>
-                </ul> --}}
+
 
             <div class="collapse navbar-collapse" id="itens">
 
@@ -99,7 +93,7 @@
 
                             <li><a href="{{ route('docencias.index') }}" class="dropdown-item">Disciplina / Professor
                                 </a></li>
-                            <li><a href="{{ route('alunos.index') }}" class="dropdown-item">Cortes e Servicos</a></li>
+                            <li><a href="{{ route('servicos.index') }}" class="dropdown-item">Cortes e Servicos</a></li>
 
                         </ul>
                     </li>

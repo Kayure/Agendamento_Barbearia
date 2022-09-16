@@ -37,6 +37,7 @@ Route::resource('/docencias', '\App\Http\Controllers\DocenciaController')->middl
 
 //ROTAS BARBEARIA
 Route::resource('/clientes', '\App\Http\Controllers\ClienteController');
+Route::resource('/servicos', '\App\Http\Controllers\ServicosController');
 
 // Google Login
 Route::get('auth/google', [GoogleAuthController::class,'redirect'])->name('google-auth');

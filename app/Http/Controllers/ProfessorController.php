@@ -89,6 +89,8 @@ class ProfessorController extends Controller
         return view('professores.show', compact(['doc']));
     }
 
+
+
     public function edit($id)
     {
 
