@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Evento;
 use Illuminate\Http\Request;
+use App\Models\Eixo;
 
 class EventoController extends Controller
 {
@@ -14,8 +15,10 @@ class EventoController extends Controller
      */
     public function index()
     {
-        //
-        return view('evento.index');
+        $eixos = Eixo::orderBy('nome')->get();
+        $data = Evento::with(['eixo'])
+        ->orderBy('nome')->get();
+        return view('evento.index', compact(['eixos']));
     }
 
     /**
@@ -25,7 +28,8 @@ class EventoController extends Controller
      */
     public function create()
     {
-        //
+        $eixos = Eixo::orderBy('nome')->get();
+        return view('middleware.blade', compact(['eixos']));
     }
 
     /**
@@ -34,9 +38,14 @@ class EventoController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+        public function store(Request $request)
     {
-        //
+
+        Evento::create($request->all());
+
+        return response()->json(true);
+
+
     }
 
     /**
@@ -83,4 +92,16 @@ class EventoController extends Controller
     {
         //
     }
+
+    public function loadEvents(){
+        $events = Evento::all();
+
+        return response()->json($events);
+    }
+
+
+
+
+
+
 }

@@ -1,0 +1,18 @@
+#external-events{
+    float: left;
+    width: 150px;
+    padding:  0 10px;
+    border: 1px solid #ccc;
+    background: #eee;
+    text-align: left;
+}
+
+#wrap{
+    width: 1100px;
+    margin: 0 auto;
+}
+
+#calendar{
+    float:right;
+    width: 900px;
+}
