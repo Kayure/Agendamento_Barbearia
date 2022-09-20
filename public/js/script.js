@@ -1,6 +1,3 @@
-function routeEvents(route){
-    return document.getElementById('agenda').dataset[route];
-}
 
 $(function () {
 

@@ -16,7 +16,7 @@ class TarefasController extends Controller
     public function index()
     {
 
-        
+
         // $cursos  = Curso::with(['eixo']);
 
         // $disciplinas = Disciplina::with(['curso'])
@@ -34,35 +34,7 @@ class TarefasController extends Controller
     public function store(Request $request)
     {
 
-        $rules = [
-            'PROFESSOR_ID_SELECTED' => 'required',
-        ];
-        $msgs = [
-            "required" => "O preenchimento do campo [:attribute] é obrigatório!",
-            "max" => "O campo [:attribute] possui tamanho máximo de [:max] caracteres!",
-            "min" => "O campo [:attribute] possui tamanho mínimo de [:min] caracteres!",
-        ];
 
-        $request->validate($rules, $msgs);
-
-        $ids_prof = $request->PROFESSOR_ID_SELECTED;
-        $disciplina = $request->DISCIPLINA;
-
-
-        for ($i = 0; $i < count($request->DISCIPLINA); $i++) {
-
-            Docencia::where('disciplina_id', '=', $disciplina[$i])->where('professor_id', '=', $ids_prof[$i])->delete();
-
-            $doc = new Docencia();
-
-            $doc->professor_id = $ids_prof[$i];
-            $doc->disciplina_id = $disciplina[$i];
-
-            $doc->save();
-        }
-
-
-        return redirect()->route('disciplinas.index');
     }
 
 

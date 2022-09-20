@@ -21,16 +21,16 @@ document.addEventListener('DOMContentLoaded', function() {
 
       editable: true,
         eventLimit: true,
-      events: routeEvents('routeLoadEvents'),
+      events:'',
 
     //   themeSystem: 'bootstrap5',
 
       headerToolbar: {
-        
+
         left: 'prev, next, today',
         center: 'title',
-        
-        
+
+
 
       },
       eventClick: function (info) {
@@ -149,7 +149,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     },
 
-     //events: routeEvents('routeLoadEvents'),
+     events: routeEvents('routeLoadEvents'),
 
     });
 

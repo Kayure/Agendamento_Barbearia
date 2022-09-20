@@ -19,7 +19,7 @@ class PermissionSeeder extends Seeder
         $arr_cat = ['eixos', 'area', 'alunos', 'professores', 'cursos', 'disciplinas', 'docencias', 'matriculas'];
         $arr_pag = ['index', 'create', 'destroy', 'edit', 'show'];
 
-        for ($i = 1; $i <= 2; $i++) {
+        for ($i = 1; $i <= 3; $i++) {
             foreach ($arr_cat as $cat) {
                 foreach ($arr_pag as $pag) {
 

@@ -21,18 +21,13 @@ Route::get('/', function () {
 });
 
 Route::get('/dashboard', function () {
-    return view('templates.middleware')->with('titulo', "");
+    return view('templates.dashboard')->with('titulo', "");
 })->middleware(['auth'])->name('dashboard');
 
 Route::resource('/cursos', '\App\Http\Controllers\CursoController')
     ->middleware(['auth']);
 
 
-Route::resource('/eixos', '\App\Http\Controllers\EixoController');
-Route::resource('/disciplinas', '\App\Http\Controllers\DisciplinaController');
-Route::resource('/professores', '\App\Http\Controllers\ProfessorController')->middleware(['auth']);
-Route::resource('/alunos', '\App\Http\Controllers\AlunoController')->middleware(['auth']);
-Route::resource('/matriculas', '\App\Http\Controllers\MatriculaController')->middleware(['auth']);
 
 
 //ROTAS BARBEARIA
@@ -53,11 +48,12 @@ Route::get('auth/facebook/call-back', [FaceBookController::class, 'callbackFaceb
 
 //Rota calendario
 Route::get('/evento', [\App\Http\Controllers\EventoController::class, 'index']);
-Route::get('/load-events', '\App\Http\Controllers\EventoController@loadEvents')->name('routeLoadEvents');
+
 Route::post('/event-store','\App\Http\Controllers\EventoController@store')->name('routeEventStore');
 Route::resource('/tarefas', '\App\Http\Controllers\TarefasController');
 
-
+//Rota para carregar os eventos no calendario
+Route::get('/load-events', '\App\Http\Controllers\EventoController@loadEvents')->name('routeLoadEvents');
 
 
 

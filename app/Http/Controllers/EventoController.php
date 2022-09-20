@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Evento;
+use App\Models\User;
 use Illuminate\Http\Request;
 use App\Models\Eixo;
 use Illuminate\Support\Facades\Auth;
@@ -16,7 +17,7 @@ class EventoController extends Controller
      */
     public function index()
     {
-        $eixos = Eixo::orderBy('nome')->get();
+        $users = User::orderBy('nome')->get();
         $data = Evento::with(['eixo'])
             ->orderBy('nome')->get();
         return view('evento.index', compact(['eixos']));
@@ -29,7 +30,7 @@ class EventoController extends Controller
      */
     public function create()
     {
-        $eixos = Eixo::orderBy('nome')->get();
+        $eixos = User::orderBy('nome')->get();
         return view('middleware.blade', compact(['eixos']));
     }
 
@@ -42,7 +43,7 @@ class EventoController extends Controller
     public function store(Request $request)
     {
 
-       
+
         $event = new Evento();
 
         $event->title = $request->title;
@@ -105,27 +106,36 @@ class EventoController extends Controller
 
 
     //FUNÇÃO QUE ERA PRA CARREGAR EVENTOS MAS N FUNCIONOU
-    public function loadEvents(Request $request)
+    public function loadEvents( Request $request)
     {
 
-        //FUNÇÃO QUE CARREGA APENAS ALGUMAS DATAS DO BANCO
-        $returnedColumns = ['id', 'title', 'start', 'end', 'color', 'description'];
-        $start = (!empty($request->start)) ? ($request->start) : ('');
-        $end = (!empty($request->end)) ? ($request->end) : ('');
-         /** Retornaremos apenas os eventos ENTRE as datas iniciais e finais visiveis no calendário */
-        $events = Evento::whereBetween('start', [$start, $end])->get($returnedColumns);
-
-       
+        {
 
 
+            //FUNÇÃO QUE CARREGA APENAS ALGUMAS DATAS DO BANCO
+             $returnedColumns = ['id', 'title', 'start', 'end', 'color', 'description'];
+             $start = (!empty($request->start)) ? ($request->start) : ('');
+             $end = (!empty($request->end)) ? ($request->end) : ('');
+              /** Retornaremos apenas os eventos ENTRE as datas iniciais e finais visiveis no calendário */
+             $events = Evento::whereBetween('start', [$start, $end])->get($returnedColumns);
 
-        //FUNÇÃO QUE PUXA TUDO DO BANCO
 
-      //  $events = Evento::all();
 
-        return response () ->json ($events);
 
-        
+
+            //FUNÇÃO QUE PUXA TUDO DO BANCO
+            //$events = Evento::all();
+
+            return response () ->json ($events);
+
+
+
+
+
+
+        }
+
+
 
 
 

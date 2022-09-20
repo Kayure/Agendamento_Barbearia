@@ -55,8 +55,8 @@
 
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a href="{{ route('professores.index') }}" class="dropdown-item">Pedro</a></li>
-                            <li><a href="{{ route('professores.index') }}" class="dropdown-item">Fulano</a></li>
+                            <li><a href="" class="dropdown-item">Pedro</a></li>
+                            <li><a href="" class="dropdown-item">Fulano</a></li>
 
 
                         </ul>
@@ -127,8 +127,8 @@
 
     {{-- INCIALIZAÇÃO DO CALENDARIO --}}
     <div class="container">
-        <div id="tarefas" 
-        data-route-load-events="{{ route('routeLoadEvents') }}" 
+        <div id="tarefas"
+        data-route-load-events="{{ route('routeLoadEvents') }}"
         data-route-load-store="{{ route('routeEventStore') }}">
 
         </div>
@@ -201,7 +201,7 @@
         body {
             margin: 40px 10px;
             padding: 0;
-          
+
             font-size: 14px;
         }
 
