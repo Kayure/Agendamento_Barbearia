@@ -7,6 +7,10 @@ document.addEventListener('DOMContentLoaded', function() {
       initialView: 'dayGridMonth',
       locale: 'pt-br',
       navLinks: true,
+      slotMinTime: '08:00:00',
+      slotMaxTime: '21:00:00',
+      allDaySlot: false,
+
     //   themeSystem: 'bootstrap5',
 
       headerToolbar: {
@@ -15,9 +19,6 @@ document.addEventListener('DOMContentLoaded', function() {
         center: 'title',
         selectable: 'true',
         editable:'true',
-
-
-
 
       },
 
@@ -47,17 +48,44 @@ document.addEventListener('DOMContentLoaded', function() {
 
     },
 
+    eventClick: function(element){
+        clearMessages('.message');
+        resetForm("#formEvent");
+
+        $("#modalCalendar").modal('show');
+        $("#modalCalendar #titleModal").text('Alterar Evento');
+        $("#modalCalendar button.deleteEvent").css("display","flex");
+
+        let id = element.event.id;
+        $("#modalCalendar input[name='id']").val(id);
+
+        let title = element.event.title;
+        $("#modalCalendar input[name='title']").val(title);
+
+        let start = moment(element.event.start).format("DD/MM/YYYY HH:mm:ss");
+        $("#modalCalendar input[name='start']").val(start);
+
+        let end = moment(element.event.end).format("DD/MM/YYYY HH:mm:ss");
+        $("#modalCalendar input[name='end']").val(end);
+
+        let color = element.event.backgroundColor;
+        $("#modalCalendar input[name='color']").val(color);
+
+        let description = element.event.extendedProps.description;
+        $("#modalCalendar textarea[name='description']").val(description);
+
+
+    },
+
 
       //FUNÇÃO PARA ABRIR A MODAL DO DIA SELECIONADO
       dateClick:function(info){
         $("#modalCalendar").modal("show");
-        $("#modalCalendar").modal("show");
+        
+        this.newEvent.date_at= obj.dateStr
 
-        let start = moment(element.event.start).format("DD/MM/YYYY HH:mm:ss");
-            $("#modalCalendar input[name='start']").val(start);
 
-            let end = moment(element.event.end).format("DD/MM/YYYY HH:mm:ss");
-            $("#modalCalendar input[name='end']").val(end);
+        
 
       },
 
@@ -98,7 +126,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     },
 
-    //   events: routeEvents('routeLoadEvents'),
+     //events: routeEvents('routeLoadEvents'),
 
     });
 
@@ -145,5 +173,3 @@ document.addEventListener('DOMContentLoaded', function() {
 //       calendar.render();
 //   });
 // </script>
-
-

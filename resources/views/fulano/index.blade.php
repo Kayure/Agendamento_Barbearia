@@ -257,17 +257,15 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="inputEmail3" class="col-sm-2 control-label">Data Inicial</label>
-                            <div class="col-sm-10">
-                                <input type="text" class="form-control" name="start" id="start" onKeyPress="DataHora(event, this)">
-                            </div>
+                            <label for="start">Iniciar</label>
+                            <input type="datetime-local" class="form-control date-time" name="start"
+                                id="start">
                         </div>
 
                         <div class="form-group">
-                            <label for="inputEmail3" class="col-sm-2 control-label">Data Final</label>
-                            <div class="col-sm-10">
-                                <input type="text" class="form-control" name="end" id="end" onKeyPress="DataHora(event, this)">
-                            </div>
+                            <label for="end">Fim</label>
+                            <input type="datetime-local" class="form-control date-time" name="end"
+                                id="end">
                         </div>
 
                         <div class="form-group">
@@ -310,7 +308,7 @@
     <div class="container py-4">
         <div class="row">
             <div class="col">
-                <h3 class="display-7 text-secondary d-none d-md-block"><b>SADSA</b></h3>
+                <h3 class="display-7 text-secondary d-none d-md-block"><b>{{ $titulo }}</b></h3>
             </div>
             @if (isset($rota))
                 <div class="col d-flex justify-content-end">

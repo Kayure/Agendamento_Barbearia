@@ -8,7 +8,7 @@ use App\Models\Eixo;
 
 
 
-class EventoController extends Controller
+class EventosController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -43,7 +43,7 @@ class EventoController extends Controller
     public function store(Request $request)
     {
 
-        $conn = mysqli_cFonnect($DB_HOST, $usuario, $senha, $dbname);
+        // $conn = mysqli_cFonnect($DB_HOST, $usuario, $senha, $dbname);
 
         $title = filter_input(INPUT_POST, 'title', FILTER_SANITIZE_STRING);
         $color = filter_input(INPUT_POST, 'color', FILTER_SANITIZE_STRING);
@@ -65,10 +65,10 @@ class EventoController extends Controller
             $end_sem_barra = $data_sem_barra . " " . $hora;
 
             $result_events = "INSERT INTO events (title, color, start, end) VALUES ('$title', '$color', '$start_sem_barra', '$end_sem_barra')";
-            $resultado_events = mysqli_query($conn, $result_events);
+
 
             //Verificar se salvou no banco de dados através "mysqli_insert_id" o qual verifica se existe o ID do último dado inserido
-            if (mysqli_insert_id($conn)) {
+            if (isset($data)) {
                 $_SESSION['msg'] = "<div class='alert alert-success' role='alert'>O Evento Cadastrado com Sucesso<button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>&times;</span></button></div>";
                 header("Location: index.php");
             } else {
