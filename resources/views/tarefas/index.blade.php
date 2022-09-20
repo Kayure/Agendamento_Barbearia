@@ -7,12 +7,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <!-- Define uma seção "titulo" -->
-    <title>Barbearia Seu Pedro @yield('titulo')</title>
+    <title>Barbearia Seu Pedro </title>
     <link rel="icon" type="image/x-icon" href="img/favicon.png" />
-
-    
-
-
 </head>
 
 <body>
@@ -131,7 +127,7 @@
 
     {{-- INCIALIZAÇÃO DO CALENDARIO --}}
     <div class="container">
-        <div id="calendario" 
+        <div id="tarefas" 
         data-route-load-events="{{ route('routeLoadEvents') }}" 
         data-route-load-store="{{ route('routeEventStore') }}">
 
@@ -218,7 +214,7 @@
     <div class="container py-4">
         <div class="row">
             <div class="col">
-                <h3 class="display-7 text-secondary d-none d-md-block"><b>{{ $titulo }}</b></h3>
+                <h3 class="display-7 text-secondary d-none d-md-block"><b></b></h3>
             </div>
             @if (isset($rota))
             <div class="col d-flex justify-content-end">
@@ -313,7 +309,7 @@
 <!-- Scrip Calendario / JS -->
 <script src="{{ asset('js/script.js') }}" defer></script>
 <!-- Agenda / JS -->
-<script src="{{ asset('js/calendario.js') }}" defer></script>
+<script src="{{ asset('js/tarefas.js') }}" defer></script>
 
 <!-- Agenda Estilos / JS -->
 

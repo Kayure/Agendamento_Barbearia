@@ -1,10 +1,11 @@
 function routeEvents(route){
-    return document.getElementById('calendar').dataset[route];
+    return document.getElementById('agenda').dataset[route];
 }
 
 $(function () {
 
     $('.date-time').mask('00/00/0000 00:00:00');
+    $('.time').mask('00:00:00');
 
 
     $.ajaxSetup({
@@ -21,9 +22,9 @@ $(".saveEvent").click(function () {
 
     let title = $("#modalCalendar input[name='title']").val();
 
-    let start = $("#modalCalendar input[name='start']").val();
+    let start = moment($("#modalCalendar input[name='start']").val(),"DD/MM/YYYY HH:mm:ss").format("YYYY-MM-DD HH:mm:ss");
 
-    let end = $("#modalCalendar input[name='end']").val();
+    let end = moment($("#modalCalendar input[name='end']").val(),"DD/MM/YYYY HH:mm:ss").format("YYYY-MM-DD HH:mm:ss");
 
     let color = $("#modalCalendar input[name='color']").val();
 
@@ -41,6 +42,10 @@ $(".saveEvent").click(function () {
 
     if(id == ''){
         route = routeEvents('routeEventStore');
+    }else{
+        route = routeEvents('routeEventUpdate');
+        Event.id = id;
+        Event._method = 'PUT';
     }
 
     sendEvent(route,Event);
@@ -99,3 +104,36 @@ function sendEvent(route, data_) {
         }
     });
 }
+
+//Mascara para o campo data e hora
+			function DataHora(evento, objeto){
+				var keypress=(window.event)?event.keyCode:evento.which;
+				campo = eval (objeto);
+				if (campo.value == '00/00/0000 00:00:00'){
+					campo.value=""
+				}
+
+				caracteres = '0123456789';
+				separacao1 = '/';
+				separacao2 = ' ';
+				separacao3 = ':';
+				conjunto1 = 2;
+				conjunto2 = 5;
+				conjunto3 = 10;
+				conjunto4 = 13;
+				conjunto5 = 16;
+				if ((caracteres.search(String.fromCharCode (keypress))!=-1) && campo.value.length < (19)){
+					if (campo.value.length == conjunto1 )
+					campo.value = campo.value + separacao1;
+					else if (campo.value.length == conjunto2)
+					campo.value = campo.value + separacao1;
+					else if (campo.value.length == conjunto3)
+					campo.value = campo.value + separacao2;
+					else if (campo.value.length == conjunto4)
+					campo.value = campo.value + separacao3;
+					else if (campo.value.length == conjunto5)
+					campo.value = campo.value + separacao3;
+				}else{
+					event.returnValue = false;
+				}
+			}

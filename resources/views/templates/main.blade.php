@@ -60,7 +60,7 @@
                         </a>
                         <ul class="dropdown-menu">
                             <li><a href="{{ route('professores.index') }}" class="dropdown-item">Pedro</a></li>
-                            <li><a href="{{ route('disciplinas.index') }}" class="dropdown-item">Fulano</a></li>
+                            <li><a href="{{ route('professores.index') }}" class="dropdown-item">Fulano</a></li>
 
 
                         </ul>
@@ -77,13 +77,13 @@
                         </a>
                         <ul class="dropdown-menu">
 
-                            <li><a href="{{ route('docencias.index') }}" class="dropdown-item">Disciplina / Professor
-                                </a></li>
+                            <li><a href="{{ route('clientes.index') }}" class="dropdown-item">Cientes</a></li>
                             <li><a href="{{ route('servicos.index') }}" class="dropdown-item">Cortes e Servicos</a></li>
+                            <li><a href="{{ route('tarefas.index') }}" class="dropdown-item">Tarefas</a></li>
 
                         </ul>
                     </li>
-                    <li class="nav-item dropdown ps-2">
+                    {{-- <li class="nav-item dropdown ps-2">
                         <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
                                 class="bi bi-coin" viewBox="0 0 16 16">
@@ -106,7 +106,7 @@
 
 
                         </ul>
-                    </li>
+                    </li> --}}
                     {{-- COLOCAR AQUI O BOTAO PRA SAIR --}}
                     <li class="nav-item ps-2 me-3">
                         <form method="POST" action="{{ route('logout') }}" id="form">

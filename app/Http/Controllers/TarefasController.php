@@ -9,7 +9,7 @@ use App\Models\Disciplina;
 use App\Models\Docencia;
 
 
-class DocenciaController extends Controller
+class TarefasController extends Controller
 {
 
 
@@ -17,14 +17,14 @@ class DocenciaController extends Controller
     {
 
         
-        $cursos  = Curso::with(['eixo']);
+        // $cursos  = Curso::with(['eixo']);
 
-        $disciplinas = Disciplina::with(['curso'])
-            ->orderBy('curso_id')->orderBy('id')->get();
+        // $disciplinas = Disciplina::with(['curso'])
+        //     ->orderBy('curso_id')->orderBy('id')->get();
 
-        $profs = Professor::orderBy('id')->get();
+        // $profs = Professor::orderBy('id')->get();
 
-        return view('docencias.index', compact(['profs', 'disciplinas', 'cursos']));
+        return view('tarefas.index');
     }
 
     public function create(Request $request)

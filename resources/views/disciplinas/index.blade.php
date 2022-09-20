@@ -1,57 +1,117 @@
-<!-- Herda o layout padrão definido no template "main" -->
-@extends('templates.middleware', ['titulo' => "disciplinas", 'rota' => "disciplinas.create",])
-<!-- Preenche o conteúdo da seção "titulo" -->
-@section('titulo') disciplinas @endsection
-<!-- Preenche o conteúdo da seção "conteudo" -->
-@section('conteudo')
-<div class="row">
-    <div class="col">
-        <table class="table align-middle caption-top table-striped">
-            <caption>Tabela de <b>disciplinas</b></caption>
-            <thead>
-                <tr>
-                    <th scope="col">Nome</th>
-                    <th scope="col" class="d-none d-md-table-cell">Curso</th>
-                    <th scope="col">Ações</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach ($data as $item)
-                <tr>
-                    <td>{{ $item->nome }}</td>
-                    <td class="d-none d-md-table-cell">{{ $item->curso->nome }}</td>
-                    <td>
-                        @if(UserPermissions::isAuthorized('disciplinas.edit'))
-                        <a href="{{ route('disciplinas.edit', '1') }}" class="btn btn-success">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#FFF" class="bi bi-arrow-counterclockwise" viewBox="0 0 16 16">
-                                <path fill-rule="evenodd" d="M8 3a5 5 0 1 1-4.546 2.914.5.5 0 0 0-.908-.417A6 6 0 1 0 8 2v1z" />
-                                <path d="M8 4.466V.534a.25.25 0 0 0-.41-.192L5.23 2.308a.25.25 0 0 0 0 .384l2.36 1.966A.25.25 0 0 0 8 4.466z" />
-                            </svg>
-                        </a>
-                        @endif
-                        @if(UserPermissions::isAuthorized('disciplinas.show'))
-                        <a href="{{ route('disciplinas.show', '1') }}" class="btn btn-primary">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#FFF" class="bi bi-info-circle-fill" viewBox="0 0 16 16">
-                                <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm.93-9.412-1 4.705c-.07.34.029.533.304.533.194 0 .487-.07.686-.246l-.088.416c-.287.346-.92.598-1.465.598-.703 0-1.002-.422-.808-1.319l.738-3.468c.064-.293.006-.399-.287-.47l-.451-.081.082-.381 2.29-.287zM8 5.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2z" />
-                            </svg>
-                        </a>
-                        @endif
-                        @if(UserPermissions::isAuthorized('disciplinas.destroy'))
-                        <a nohref style="cursor:pointer" onclick="document.getElementById('form_1').submit()" class="btn btn-danger">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#FFF" class="bi bi-trash-fill" viewBox="0 0 16 16">
-                                <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0z" />
-                            </svg>
-                        </a>
-                        @endif
-                    </td>
-                    <form action="{{ route('disciplinas.destroy', '1') }}" method="POST" id="form_1">
-                        @csrf
-                        @method('DELETE')
-                    </form>
-                </tr>
-                @endforeach
-            </tbody>
-        </table>
-    </div>
-</div>
-@endsection
+<?php
+session_start();
+include_once("conexao.php");
+$result_events = "SELECT id, title, color, start, end FROM events";
+$resultado_events = mysqli_query($conn, $result_events);
+?>
+<!DOCTYPE html>
+<html lang="pt-br">
+	<head>
+		<meta charset='utf-8' />
+		<title>Agenda</title>
+		<link href='css/bootstrap.min.css' rel='stylesheet'>
+		<link href='css/fullcalendar.min.css' rel='stylesheet' />
+		<link href='css/fullcalendar.print.min.css' rel='stylesheet' media='print' />
+		<link href='css/personalizado.css' rel='stylesheet' />
+		<script src='js/jquery.min.js'></script>
+		<script src='js/bootstrap.min.js'></script>
+		<script src='js/moment.min.js'></script>
+		<script src='js/fullcalendar.min.js'></script>
+		<script src='locale/pt-br.js'></script>
+
+	</head>
+	<body>
+		<div class="container">
+			<div class="page-header">
+				<h1>Agenda</h1>
+			</div>
+			<?php
+			if(isset($_SESSION['msg'])){
+				echo $_SESSION['msg'];
+				unset($_SESSION['msg']);
+			}
+			?>
+
+
+		</div>
+
+		<div class="modal fade" id="visualizar" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" data-backdrop="static">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+						<h4 class="modal-title text-center">Dados do Evento</h4>
+					</div>
+					<div class="modal-body">
+						<dl class="dl-horizontal">
+							<dt>ID do Evento</dt>
+							<dd id="id"></dd>
+							<dt>Titulo do Evento</dt>
+							<dd id="title"></dd>
+							<dt>Inicio do Evento</dt>
+							<dd id="start"></dd>
+							<dt>Fim do Evento</dt>
+							<dd id="end"></dd>
+						</dl>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="modal fade" id="cadastrar" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" data-backdrop="static">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+						<h4 class="modal-title text-center">Cadastrar Evento</h4>
+					</div>
+					<div class="modal-body">
+						<form class="form-horizontal" method="POST" action="proc_cad_evento.php">
+							<div class="form-group">
+								<label for="inputEmail3" class="col-sm-2 control-label">Titulo</label>
+								<div class="col-sm-10">
+									<input type="text" class="form-control" name="title" placeholder="Titulo do Evento">
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="inputEmail3" class="col-sm-2 control-label">Cor</label>
+								<div class="col-sm-10">
+									<select name="color" class="form-control" id="color">
+										<option value="">Selecione</option>
+										<option style="color:#FFD700;" value="#FFD700">Amarelo</option>
+										<option style="color:#0071c5;" value="#0071c5">Azul Turquesa</option>
+										<option style="color:#FF4500;" value="#FF4500">Laranja</option>
+										<option style="color:#8B4513;" value="#8B4513">Marrom</option>
+										<option style="color:#1C1C1C;" value="#1C1C1C">Preto</option>
+										<option style="color:#436EEE;" value="#436EEE">Royal Blue</option>
+										<option style="color:#A020F0;" value="#A020F0">Roxo</option>
+										<option style="color:#40E0D0;" value="#40E0D0">Turquesa</option>
+										<option style="color:#228B22;" value="#228B22">Verde</option>
+										<option style="color:#8B0000;" value="#8B0000">Vermelho</option>
+									</select>
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="inputEmail3" class="col-sm-2 control-label">Data Inicial</label>
+								<div class="col-sm-10">
+									<input type="text" class="form-control" name="start" id="start" onKeyPress="DataHora(event, this)">
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="inputEmail3" class="col-sm-2 control-label">Data Final</label>
+								<div class="col-sm-10">
+									<input type="text" class="form-control" name="end" id="end" onKeyPress="DataHora(event, this)">
+								</div>
+							</div>
+							<div class="form-group">
+								<div class="col-sm-offset-2 col-sm-10">
+									<button type="submit" class="btn btn-success">Cadastrar</button>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>
