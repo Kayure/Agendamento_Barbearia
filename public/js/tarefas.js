@@ -1,26 +1,47 @@
+function routeEvents(route){
+  return document.getElementById('tarefas').dataset[route];
+}
+
 document.addEventListener('DOMContentLoaded', function() {
 
     let formulario = document.querySelector("form");
-    var calendarEl = document.getElementById('agenda');
+    var calendarEl = document.getElementById('tarefas');
     var calendar = new FullCalendar.Calendar(calendarEl, {
 
-      initialView: 'dayGridMonth',
+      initialView: 'listWeek',
       locale: 'pt-br',
       navLinks: true,
       slotMinTime: '08:00:00',
       slotMaxTime: '21:00:00',
+      selectable: true,
       allDaySlot: false,
+      editable:false,
+      eventLimit: true,
+      doppable:false,
+
+      editable: true,
+        eventLimit: true,
+      events:'',
 
     //   themeSystem: 'bootstrap5',
 
       headerToolbar: {
-        right: 'dayGridMonth,timeGridDay,listWeek',
+
         left: 'prev, next, today',
         center: 'title',
-        selectable: 'true',
-        editable:'true',
+
+
 
       },
+      eventClick: function (info) {
+        info.jsEvent.preventDefault(); // don't let the browser navigate
+
+        $('#visualizar #id').text(info.event.id);
+        $('#visualizar #title').text(info.event.title);
+        $('#visualizar #start').text(info.event.start.toLocaleString());
+        $('#visualizar #end').text(info.event.end.toLocaleString());
+        $('#visualizar').modal('show');
+    },
 
       drop: function(element) {
 
@@ -81,11 +102,13 @@ document.addEventListener('DOMContentLoaded', function() {
       //FUNÇÃO PARA ABRIR A MODAL DO DIA SELECIONADO
       dateClick:function(info){
         $("#modalCalendar").modal("show");
-        
-        this.newEvent.date_at= obj.dateStr
 
 
-        
+        let start = moment(element.event.start).format("DD/MM/YYYY HH:mm:ss");
+            $("#modalCalendar input[name='start']").val(start);
+
+            let end = moment(element.event.end).format("DD/MM/YYYY HH:mm:ss");
+            $("#modalCalendar input[name='end']").val(end);
 
       },
 
@@ -126,50 +149,18 @@ document.addEventListener('DOMContentLoaded', function() {
 
     },
 
-     //events: routeEvents('routeLoadEvents'),
+     events: routeEvents('routeLoadEvents'),
 
     });
 
 
     calendar.render();
 
-    document.getElementById("btnSalvar").addEventListener("click"), function(){
-        const dados = new FormData(formulario);
-        console.log(dados);
-    };
-
 
   });
 
 
 
+console.log(routeEvents('teste'));
 
 
-
-
-
-
-
-//   <script>
-
-//   document.addEventListener('DOMContentLoaded', function () {
-//       var calendarEl = document.getElementById('calendar');
-
-//       var calendar = new FullCalendar.Calendar(calendarEl, {
-//           locale: 'pt-br',
-//           plugins: ['interaction', 'dayGrid'],
-//           //defaultDate: '2019-04-12',
-//           editable: true,
-//           eventLimit: true,
-//           // events: 'list_eventos.php',
-//           events: 'list_eventos.php',
-//           extraParams: function () {
-//               return {
-//                   cachebuster: new Date().valueOf()
-//               };
-//           }
-//       });
-
-//       calendar.render();
-//   });
-// </script>

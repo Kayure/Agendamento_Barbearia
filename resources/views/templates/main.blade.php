@@ -79,7 +79,7 @@
 
                             <li><a href="{{ route('clientes.index') }}" class="dropdown-item">Cientes</a></li>
                             <li><a href="{{ route('servicos.index') }}" class="dropdown-item">Cortes e Servicos</a></li>
-                            <li><a href="{{ route('docencias.index') }}" class="dropdown-item">Teste</a></li>
+                            <li><a href="{{ route('tarefas.index') }}" class="dropdown-item">Tarefas</a></li>
 
                         </ul>
                     </li>

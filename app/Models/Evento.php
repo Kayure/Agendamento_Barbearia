@@ -8,7 +8,13 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Evento extends Model
 {
+
     use SoftDeletes;
+    protected $table = 'eventos';
 
     protected $fillable = ['title', 'start','end','color','description'];
+
+    public function user() {
+        return $this->belongsTo('App\Models\User');
+    }
 }

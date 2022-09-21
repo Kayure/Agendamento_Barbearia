@@ -3,10 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Evento;
+use App\Models\User;
 use Illuminate\Http\Request;
 use App\Models\Eixo;
-
-
+use Illuminate\Support\Facades\Auth;
 
 class EventoController extends Controller
 {
@@ -17,7 +17,7 @@ class EventoController extends Controller
      */
     public function index()
     {
-        $eixos = Eixo::orderBy('nome')->get();
+        $users = User::orderBy('nome')->get();
         $data = Evento::with(['eixo'])
             ->orderBy('nome')->get();
         return view('evento.index', compact(['eixos']));
@@ -30,7 +30,7 @@ class EventoController extends Controller
      */
     public function create()
     {
-        $eixos = Eixo::orderBy('nome')->get();
+        $eixos = User::orderBy('nome')->get();
         return view('middleware.blade', compact(['eixos']));
     }
 
@@ -43,44 +43,19 @@ class EventoController extends Controller
     public function store(Request $request)
     {
 
-        $conn = mysqli_cFonnect($DB_HOST, $usuario, $senha, $dbname);
 
-        $title = filter_input(INPUT_POST, 'title', FILTER_SANITIZE_STRING);
-        $color = filter_input(INPUT_POST, 'color', FILTER_SANITIZE_STRING);
-        $start = filter_input(INPUT_POST, 'start', FILTER_SANITIZE_STRING);
-        $end = filter_input(INPUT_POST, 'end', FILTER_SANITIZE_STRING);
+        $event = new Evento();
 
-        if (!empty($title) && !empty($color) && !empty($start) && !empty($end)) {
-            //Converter a data e hora do formato brasileiro para o formato do Banco de Dados
-            $data = explode(" ", $start);
-            list($date, $hora) = $data;
-            $data_sem_barra = array_reverse(explode("/", $date));
-            $data_sem_barra = implode("-", $data_sem_barra);
-            $start_sem_barra = $data_sem_barra . " " . $hora;
+        $event->title = $request->title;
+        $event->start = $request->start;
+        $event->end = $request->end;
+        $event->color = $request->color;
+        $event->description = $request->description;
+        $event->user_id = Auth::user()->id;
 
-            $data = explode(" ", $end);
-            list($date, $hora) = $data;
-            $data_sem_barra = array_reverse(explode("/", $date));
-            $data_sem_barra = implode("-", $data_sem_barra);
-            $end_sem_barra = $data_sem_barra . " " . $hora;
+        $event->save();
 
-            $result_events = "INSERT INTO events (title, color, start, end) VALUES ('$title', '$color', '$start_sem_barra', '$end_sem_barra')";
-            $resultado_events = mysqli_query($conn, $result_events);
-
-            //Verificar se salvou no banco de dados através "mysqli_insert_id" o qual verifica se existe o ID do último dado inserido
-            if (mysqli_insert_id($conn)) {
-                $_SESSION['msg'] = "<div class='alert alert-success' role='alert'>O Evento Cadastrado com Sucesso<button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>&times;</span></button></div>";
-                header("Location: index.php");
-            } else {
-                $_SESSION['msg'] = "<div class='alert alert-danger' role='alert'>Erro ao cadastrar o evento <button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>&times;</span></button></div>";
-                header("Location: index.php");
-            }
-        } else {
-            $_SESSION['msg'] = "<div class='alert alert-danger' role='alert'>Erro ao cadastrar o evento <button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>&times;</span></button></div>";
-            header("Location: index.php");
-        }
-
-        return view('docencias.index');
+        return redirect()->route('dashboard');
     }
 
     /**
@@ -131,19 +106,39 @@ class EventoController extends Controller
 
 
     //FUNÇÃO QUE ERA PRA CARREGAR EVENTOS MAS N FUNCIONOU
-    public function loadEvents(Request $request)
+    public function loadEvents( Request $request)
     {
 
-        $returnedColumns = ['id', 'title', 'start', 'end', 'color', 'description'];
-
-        $start = (!empty($request->start)) ? ($request->start) : ('');
-        $end = (!empty($request->end)) ? ($request->end) : ('');
+        {
 
 
+            //FUNÇÃO QUE CARREGA APENAS ALGUMAS DATAS DO BANCO
+             $returnedColumns = ['id', 'title', 'start', 'end', 'color', 'description'];
+             $start = (!empty($request->start)) ? ($request->start) : ('');
+             $end = (!empty($request->end)) ? ($request->end) : ('');
+              /** Retornaremos apenas os eventos ENTRE as datas iniciais e finais visiveis no calendário */
+             $events = Evento::whereBetween('start', [$start, $end])->get($returnedColumns);
 
-        /** Retornaremos apenas os eventos ENTRE as datas iniciais e finais visiveis no calendário */
-        $events = Evento::whereBetween('start', [$start, $end])->get($returnedColumns);
 
-        return response()->json($events);
+
+
+
+            //FUNÇÃO QUE PUXA TUDO DO BANCO
+            //$events = Evento::all();
+
+            return response () ->json ($events);
+
+
+
+
+
+
+        }
+
+
+
+
+
+
     }
 }
