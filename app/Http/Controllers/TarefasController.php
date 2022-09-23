@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use App\Models\Professor;
 use App\Models\Disciplina;
 use App\Models\Docencia;
+use App\Models\Evento;
+use App\Facades\UserPermissions;
 
 
 class TarefasController extends Controller
@@ -15,16 +17,18 @@ class TarefasController extends Controller
 
     public function index()
     {
+        // if(!UserPermissions::isAuthorized('tarefas.index')) {
+        //     return response()->view('templates.restrito');
+        // }
+
+        $data = Evento::with(['user'])->orderBy('start')->get();
 
 
-        // $cursos  = Curso::with(['eixo']);
 
-        // $disciplinas = Disciplina::with(['curso'])
-        //     ->orderBy('curso_id')->orderBy('id')->get();
 
-        // $profs = Professor::orderBy('id')->get();
 
-        return view('tarefas.index');
+
+        return view('tarefas.index', compact(['data']));
     }
 
     public function create(Request $request)
@@ -32,6 +36,12 @@ class TarefasController extends Controller
     }
 
     public function store(Request $request)
+    {
+
+
+    }
+
+    public function finalizar(Request $request)
     {
 
 
@@ -56,7 +66,19 @@ class TarefasController extends Controller
      */
     public function edit($id)
     {
-        //
+
+
+        $data = Evento::find($id);
+
+
+
+
+        if (isset($item)) {
+            $item->finished == 1;
+        } else {
+
+            return view('tarefas.index');
+        }
     }
 
     /**
@@ -79,6 +101,16 @@ class TarefasController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $obj = Evento::find($id);
+
+        if (isset($obj)) {
+            $obj->delete();
+        } else {
+            $msg = "Evento";
+            $link = "tarefas.index";
+            return view('erros.id', compact(['msg', 'link']));
+        }
+
+        return redirect()->route('tarefas.index');
     }
 }

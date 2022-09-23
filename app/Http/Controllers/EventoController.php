@@ -7,6 +7,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use App\Models\Eixo;
 use Illuminate\Support\Facades\Auth;
+use App\Facades\UserPermissions;
 
 class EventoController extends Controller
 {
@@ -44,14 +45,31 @@ class EventoController extends Controller
     {
 
 
+    //    $_GET['date'];
+    //$start = new \DateTime($_GET['date'], new \DateTimeZone('America/Sao_Paulo'));
+
+        //DEFINE A HORA DE ATENDIMENTO
+        $horaAtendimento =1;
+
+        //DEFINE QUE A HORA FINAL É A HORA INICIAL + 1 HORA
+        //$end =$start->modify('+'.$horaAtendimento.'hours');
+
+
         $event = new Evento();
+
+        //NEM USEI
+
+
+
 
         $event->title = $request->title;
         $event->start = $request->start;
         $event->end = $request->end;
+        // $event->end = $request->$end;
         $event->color = $request->color;
         $event->description = $request->description;
         $event->user_id = Auth::user()->id;
+        $event->finished = 0;
 
         $event->save();
 
@@ -99,14 +117,28 @@ class EventoController extends Controller
      * @return \Illuminate\Http\Response
      *
      */
-    public function destroy(Evento $evento)
+    public function destroy($id)
     {
-        //
+        if(!UserPermissions::isAuthorized('eventos.destroy')) {
+            return response()->view('templates.restrito');
+        }
+
+        $obj = Evento::find($id);
+
+        if (isset($obj)) {
+            $obj->delete();
+        } else {
+            $msg = "Curso";
+            $link = "cursos.index";
+            return view('erros.id', compact(['msg', 'link']));
+        }
+
+        return redirect()->route('tarefas.index');
     }
 
 
     //FUNÇÃO QUE ERA PRA CARREGAR EVENTOS MAS N FUNCIONOU
-    public function loadEvents( Request $request)
+    public function loadEvents( Request $request )
     {
 
         {
@@ -118,6 +150,8 @@ class EventoController extends Controller
              $end = (!empty($request->end)) ? ($request->end) : ('');
               /** Retornaremos apenas os eventos ENTRE as datas iniciais e finais visiveis no calendário */
              $events = Evento::whereBetween('start', [$start, $end])->get($returnedColumns);
+
+
 
 
 

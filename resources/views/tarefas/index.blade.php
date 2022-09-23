@@ -79,30 +79,7 @@
 
                         </ul>
                     </li>
-                    {{-- <li class="nav-item dropdown ps-2">
-                        <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
-                                class="bi bi-coin" viewBox="0 0 16 16">
-                                <path
-                                    d="M5.5 9.511c.076.954.83 1.697 2.182 1.785V12h.6v-.709c1.4-.098 2.218-.846 2.218-1.932 0-.987-.626-1.496-1.745-1.76l-.473-.112V5.57c.6.068.982.396 1.074.85h1.052c-.076-.919-.864-1.638-2.126-1.716V4h-.6v.719c-1.195.117-2.01.836-2.01 1.853 0 .9.606 1.472 1.613 1.707l.397.098v2.034c-.615-.093-1.022-.43-1.114-.9H5.5zm2.177-2.166c-.59-.137-.91-.416-.91-.836 0-.47.345-.822.915-.925v1.76h-.005zm.692 1.193c.717.166 1.048.435 1.048.91 0 .542-.412.914-1.135.982V8.518l.087.02z" />
-                                <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
-                                <path
-                                    d="M8 13.5a5.5 5.5 0 1 1 0-11 5.5 5.5 0 0 1 0 11zm0 .5A6 6 0 1 0 8 2a6 6 0 0 0 0 12z" />
-                            </svg>
-                            <span class="ps-1 text-white">Financeiro </span>
 
-                        </a>
-
-
-                        <ul class="dropdown-menu">
-                            <li><a href="{{ route('clientes.index') }}" class="dropdown-item">Cientes</a></li>
-                            <li><a href="{{ route('servicos.index') }}" class="dropdown-item">Servicos</a></li>
-
-
-
-
-                        </ul>
-                    </li> --}}
                     {{-- COLOCAR AQUI O BOTAO PRA SAIR --}}
                     <li class="nav-item ps-2 me-3">
                         <form method="POST" action="{{ route('logout') }}" id="form">
@@ -127,16 +104,93 @@
 
     {{-- INCIALIZAÇÃO DO CALENDARIO --}}
     <div class="container">
-        <div id="tarefas"
-        data-route-load-events="{{ route('routeLoadEvents') }}"
-        data-route-load-store="{{ route('routeEventStore') }}">
+        <div id="tarefas" data-route-load-events="{{ route('routeLoadEvents') }}"
+            data-route-load-store="{{ route('routeEventStore') }}">
 
         </div>
+
+        <div class="row">
+            <div class="col">
+                <table class="table align-middle caption-top table-striped">
+                    <caption>Agendamentos de <b> HOJE</b></caption>
+                    <thead>
+                        <tr>
+                            <th scope="col">STATUS</th>
+                            <th scope="col">CLIENTE</th>
+                            <th scope="col" class="d-none d-md-table-cell">DATA</th>
+                            <th scope="col">DESCRICAO</th>
+                            <th scope="col">AÇÕES</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($data as $item)
+                            <tr>
+                                <td class="d-none d-md-table-cell">@if($item->finished == 1) ✔ @else 🧭 @endif</td>
+                                <td>{{ $item->title }}</td>
+                                <td>{{ date('d/m/Y H:i', strtotime($item->start)) }}</td>
+
+
+                                <td>{{ $item->description }}</td>
+
+                                <td>
+                                    <a href="{{ route('tarefas.edit', $item->id, $item->finished=1) }}" class="btn btn-primary">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                            fill="currentColor" class="bi bi-check-circle" viewBox="0 0 16 16">
+                                            <path
+                                                d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
+                                            <path
+                                                d="M10.97 4.97a.235.235 0 0 0-.02.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-1.071-1.05z" />
+                                        </svg>
+                                    </a>
+                                    {{-- @if (UserPermissions::isAuthorized('tarefas.edit')) --}}
+                                    <a href="{{ route('tarefas.edit', $item->id) }}" class="btn btn-success">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                            fill="#FFF" class="bi bi-arrow-counterclockwise" viewBox="0 0 16 16">
+                                            <path fill-rule="evenodd"
+                                                d="M8 3a5 5 0 1 1s-4.546 2.914.5.5 0 0 0-.908-.417A6 6 0 1 0 8 2v1z" />
+                                            <path
+                                                d="M8 4.466V.534a.25.25 0 0 0-.41-.192L5.23 2.308a.25.25 0 0 0 0 .384l2.36 1.966A.25.25 0 0 0 8 4.466z" />
+                                        </svg>
+                                    </a>
+                                    {{-- @endif --}}
+                                    {{-- @if (UserPermissions::isAuthorized('tarefas.show')) --}}
+
+                                    {{-- @endif --}}
+                                    {{-- @if (UserPermissions::isAuthorized('tarefas.destroy')) --}}
+                                    <a nohref style="cursor:pointer"
+                                        onclick="document.getElementById('form_1').submit()" class="btn btn-danger">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                            fill="#FFF" class="bi bi-trash-fill" viewBox="0 0 16 16">
+                                            <path
+                                                d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0z" />
+                                        </svg>
+                                    </a>
+                                    {{-- @endif --}}
+                                </td>
+                                <form action="{{ route('evento.destroy', $item['id']) }}" method="POST" id="form_{{$item['id']}}">
+                                    @csrf
+                                    @method('DELETE')
+                                </form>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+
+
+
+
+
+
+
     </div>
 
 
     <!-- Modal -->
-    <div class="modal fade" id="modalCalendar" tabindex="-1" role="dialog" aria-labelledby="titleModal" aria-hidden="true">
+    <div class="modal fade" id="modalCalendar" tabindex="-1" role="dialog" aria-labelledby="titleModal"
+        aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -150,13 +204,16 @@
                         @csrf
                         <div class="form-group">
                             <label for="title">Tipo de serviço</label>
-                            <input type="text" class="form-control" name="title" id="title" aria-describedby="" placeholder="Corte/Barba/Sobrancelha">
+                            <input type="text" class="form-control" name="title" id="title"
+                                aria-describedby="" placeholder="Corte/Barba/Sobrancelha">
                             <small id="helpId" class="form-text text-muted"> Escolha um horário </small>
                         </div>
 
                         <div class="col-span-6 sm:col-span-3">
-                            <label for="timeSesion" class="block text-sm font-medium leading-5 text-gray-700">Duração</label>
-                            <select v-model="form.session" id="timeSesion" class="mt-1 block form-select w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:shadow-outline-blue focus:border-blue-300 transition duration-150 ease-in-out sm:text-sm sm:leading-5">
+                            <label for="timeSesion"
+                                class="block text-sm font-medium leading-5 text-gray-700">Duração</label>
+                            <select v-model="form.session" id="timeSesion"
+                                class="mt-1 block form-select w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:shadow-outline-blue focus:border-blue-300 transition duration-150 ease-in-out sm:text-sm sm:leading-5">
                                 <option value="900">15 minutos</option>
                                 <option value="1800">30 minutos</option>
                                 <option value="3600">1 hora</option>
@@ -165,26 +222,31 @@
 
                         <div class="form-group">
                             <label for="start">Iniciar</label>
-                            <input type="datetime-local" class="form-control date-time" name="start" id="start">
+                            <input type="datetime-local" class="form-control date-time" name="start"
+                                id="start">
                         </div>
 
                         <div class="form-group">
                             <label for="end">Fim</label>
-                            <input type="datetime-local" class="form-control date-time" name="end" id="end">
+                            <input type="datetime-local" class="form-control date-time" name="end"
+                                id="end">
                         </div>
 
                         <div class="form-group">
                             <label for="color">Cor</label>
-                            <input type="color" class="form-control" name="color" id="color" aria-describedby="helpId">
+                            <input type="color" class="form-control" name="color" id="color"
+                                aria-describedby="helpId">
                         </div>
 
                         <div class="form-group mt-2">
-                            <textarea class="form-control" name="description" id="description" cols="80" rows="5" placeholder="Observação"></textarea>
+                            <textarea class="form-control" name="description" id="description" cols="80" rows="5"
+                                placeholder="Observação"></textarea>
                         </div>
                         <div class="modal-footer">
                             <button type="submit" class="btn btn-success saveEvent" id="btnSalvar">Salvar</button>
                             <button type="submit" class="btn btn-warning" id="btnEditar">Editar</button>
-                            <button type="submit" class="btn btn-danger deleteEvent" id="btnExcluir">Excluir</button>
+                            <button type="submit" class="btn btn-danger deleteEvent"
+                                id="btnExcluir">Excluir</button>
                         </div>
 
                     </form>
@@ -196,6 +258,9 @@
             </div>
         </div>
     </div>
+
+
+
 
     <style>
         body {
@@ -217,15 +282,17 @@
                 <h3 class="display-7 text-secondary d-none d-md-block"><b></b></h3>
             </div>
             @if (isset($rota))
-            <div class="col d-flex justify-content-end">
+                <div class="col d-flex justify-content-end">
 
-                <a href="{{ route($rota) }}" class="btn btn-dark">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#FFF" class="bi bi-plus-circle-fill" viewBox="0 0 16 16">
-                        <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3v-3z" />
-                    </svg>
-                    &nbsp; Adicionar
-                </a>
-            </div>
+                    <a href="{{ route($rota) }}" class="btn btn-dark">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#FFF"
+                            class="bi bi-plus-circle-fill" viewBox="0 0 16 16">
+                            <path
+                                d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3v-3z" />
+                        </svg>
+                        &nbsp; Adicionar
+                    </a>
+                </div>
             @endif
         </div>
         <hr>
@@ -246,12 +313,14 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title text-primary">Mais Informações</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="infoModal" onclick="closeInfoModal()" aria-label="Close"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="infoModal" onclick="closeInfoModal()"
+                    aria-label="Close"></button>
             </div>
             <div class="modal-body text-secondary">
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary btn-block align-content-center" onclick="closeInfoModal()">
+                <button type="button" class="btn btn-primary btn-block align-content-center"
+                    onclick="closeInfoModal()">
                     OK
                 </button>
             </div>
@@ -264,22 +333,28 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title text-danger">Operação de Remoção</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="removeModal" onclick="closeRemoveModal()" aria-label="Close"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="removeModal" onclick="closeRemoveModal()"
+                    aria-label="Close"></button>
             </div>
             <input type="hidden" id="id_remove">
             <div class="modal-body text-secondary">
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary btn-block align-content-center" onclick="closeRemoveModal()">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-arrow-left-square-fill" viewBox="0 0 16 16">
-                        <path d="M16 14a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12zm-4.5-6.5H5.707l2.147-2.146a.5.5 0 1 0-.708-.708l-3 3a.5.5 0 0 0 0 .708l3 3a.5.5 0 0 0 .708-.708L5.707 8.5H11.5a.5.5 0 0 0 0-1z" />
+                <button type="button" class="btn btn-secondary btn-block align-content-center"
+                    onclick="closeRemoveModal()">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
+                        class="bi bi-arrow-left-square-fill" viewBox="0 0 16 16">
+                        <path
+                            d="M16 14a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12zm-4.5-6.5H5.707l2.147-2.146a.5.5 0 1 0-.708-.708l-3 3a.5.5 0 0 0 0 .708l3 3a.5.5 0 0 0 .708-.708L5.707 8.5H11.5a.5.5 0 0 0 0-1z" />
                     </svg>
                     &nbsp; Não
                 </button>
                 <button type="button" class="btn btn-danger" onclick="remove()">
                     Sim &nbsp;
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-check-circle-fill" viewBox="0 0 16 16">
-                        <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z" />
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
+                        class="bi bi-check-circle-fill" viewBox="0 0 16 16">
+                        <path
+                            d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z" />
                     </svg>
                 </button>
             </div>
@@ -288,7 +363,8 @@
 </div>
 
 <!-- Bootstrap 5 / CSS -->
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 <link href='css/core/main.min.css' rel='stylesheet' />
 <link href='css/daygrid/main.min.css' rel='stylesheet' />
 <script src='js/core/main.min.js'></script>
@@ -302,7 +378,8 @@
 <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/locales-all.js"></script>
 
 <!-- Bootstrap 5 / JS -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous">
 </script>
 <!-- JQuery / JS -->
 <script src="{{ asset('js/jquery-3.6.0.min.js') }}"></script>
