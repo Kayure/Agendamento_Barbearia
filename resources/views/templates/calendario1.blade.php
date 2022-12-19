@@ -7,8 +7,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <!-- Define uma seção "titulo" -->
-    <title>Barbearia Seu Pedro </title>
+    <title>Barbearia Seu Pedro @yield('titulo')</title>
     <link rel="icon" type="image/x-icon" href="img/favicon.png" />
+
+
+
+
 </head>
 
 <body>
@@ -55,8 +59,14 @@
 
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a href="" class="dropdown-item">Pedro</a></li>
-                            <li><a href="" class="dropdown-item">Fulano</a></li>
+                            <li><a href="{{ route('clientes.index') }}" class="dropdown-item">Pedro</a></li>
+
+                            <li><a href="{{ url('/calendario0') }}" class="dropdown-item">Calendario 0, [PRINCIPAL] </a></li>
+                            <li><a href="{{ url('/calendario1') }}" class="dropdown-item">Calendario 1</a></li>
+
+                            <li><a href="{{ url('/calendario3') }}" class="dropdown-item">Calendario 3</a></li>
+
+
 
 
                         </ul>
@@ -103,94 +113,61 @@
     </nav>
 
     {{-- INCIALIZAÇÃO DO CALENDARIO --}}
-    <div class="container">
-        <div id="tarefas" data-route-load-events="{{ route('routeLoadEvents') }}"
+    {{-- <div class="container">
+        <div id="calendario0" data-route-load-events="{{ route('routeLoadEvents') }}"
             data-route-load-store="{{ route('routeEventStore') }}">
 
+
         </div>
+    </div> --}}
 
-        <div class="row">
-            <div class="col">
-                <table class="table align-middle caption-top table-striped">
-                    <caption>Agendamentos de <b> HOJE</b></caption>
-                    <thead>
-                        <tr>
-                            <th scope="col">STATUS</th>
-                            <th scope="col">CLIENTE</th>
-                            <th scope="col" class="d-none d-md-table-cell">DATA</th>
-                            <th scope="col">DESCRICAO</th>
-                            <th scope="col">AÇÕES</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach ($data as $item)
-                            <tr>
-                                <td class="d-none d-md-table-cell">@if($item->finished == 1) ✔ @else 🧭 @endif</td>
-                                <td>{{ $item->title }}</td>
-                                <td>{{ date('d/m/Y H:i', strtotime($item->start)) }}</td>
+     {{-- INCIALIZAÇÃO DO CALENDARIO 1 --}}
+     <<div id='calendario1'></div>
 
 
-                                <td>{{ $item->description }}</td>
-
-                                <td>
-                                    <a href="{{ route('tarefas.edit', $item->id, $item->finished=1) }}" class="btn btn-primary">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                            fill="currentColor" class="bi bi-check-circle" viewBox="0 0 16 16">
-                                            <path
-                                                d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
-                                            <path
-                                                d="M10.97 4.97a.235.235 0 0 0-.02.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-1.071-1.05z" />
-                                        </svg>
-                                    </a>
-                                    {{-- @if (UserPermissions::isAuthorized('tarefas.edit')) --}}
-                                    <a href="{{ route('tarefas.edit', $item->id) }}" class="btn btn-success">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                            fill="#FFF" class="bi bi-arrow-counterclockwise" viewBox="0 0 16 16">
-                                            <path fill-rule="evenodd"
-                                                d="M8 3a5 5 0 1 1s-4.546 2.914.5.5 0 0 0-.908-.417A6 6 0 1 0 8 2v1z" />
-                                            <path
-                                                d="M8 4.466V.534a.25.25 0 0 0-.41-.192L5.23 2.308a.25.25 0 0 0 0 .384l2.36 1.966A.25.25 0 0 0 8 4.466z" />
-                                        </svg>
-                                    </a>
-                                    {{-- @endif --}}
-                                    {{-- @if (UserPermissions::isAuthorized('tarefas.show')) --}}
-
-                                    {{-- @endif --}}
-                                    {{-- @if (UserPermissions::isAuthorized('tarefas.destroy')) --}}
-                                    <a nohref style="cursor:pointer"
-                                        onclick="document.getElementById('form_1').submit()" class="btn btn-danger">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                            fill="#FFF" class="bi bi-trash-fill" viewBox="0 0 16 16">
-                                            <path
-                                                d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0z" />
-                                        </svg>
-                                    </a>
-                                    {{-- @endif --}}
-                                </td>
-                                <form action="{{ route('evento.destroy', $item['id']) }}" method="POST" id="form_{{$item['id']}}">
-                                    @csrf
-                                    @method('DELETE')
-                                </form>
-                            </tr>
-                        @endforeach
-                    </tbody>
-                </table>
-            </div>
         </div>
-
-
-
-
-
-
-
-
     </div>
 
+    <script>
+        //Mascara para o campo data e hora
+			function DataHora(evento, objeto){
+				var keypress=(window.event)?event.keyCode:evento.which;
+				campo = eval (objeto);
+				if (campo.value == '00/00/0000 00:00:00'){
+					campo.value=""
+				}
 
-    <!-- Modal -->
-    <div class="modal fade" id="modalCalendar" tabindex="-1" role="dialog" aria-labelledby="titleModal"
+				caracteres = '0123456789';
+				separacao1 = '/';
+				separacao2 = ' ';
+				separacao3 = ':';
+				conjunto1 = 2;
+				conjunto2 = 5;
+				conjunto3 = 10;
+				conjunto4 = 13;
+				conjunto5 = 16;
+				if ((caracteres.search(String.fromCharCode (keypress))!=-1) && campo.value.length < (19)){
+					if (campo.value.length == conjunto1 )
+					campo.value = campo.value + separacao1;
+					else if (campo.value.length == conjunto2)
+					campo.value = campo.value + separacao1;
+					else if (campo.value.length == conjunto3)
+					campo.value = campo.value + separacao2;
+					else if (campo.value.length == conjunto4)
+					campo.value = campo.value + separacao3;
+					else if (campo.value.length == conjunto5)
+					campo.value = campo.value + separacao3;
+				}else{
+					event.returnValue = false;
+				}
+			}
+    </script>
+
+
+    <!-- Modal Cadastrar -->
+    <div class="modal fade" id="cadastrar" tabindex="-1" role="dialog" aria-labelledby="titleModal"
         aria-hidden="true">
+        <input type="hide" id="hora" name="hora">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -200,48 +177,45 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form action="{{ route('evento.store') }}" method="POST">
+                    <form id="formEvent" action="{{ route('evento.store') }}" method="POST">
                         @csrf
+
+
                         <div class="form-group">
-                            <label for="title">Tipo de serviço</label>
+                            <label for="title">Cliente</label>
                             <input type="text" class="form-control" name="title" id="title"
-                                aria-describedby="" placeholder="Corte/Barba/Sobrancelha">
+                                aria-describedby="" placeholder="Digite seu nome ou do cliente desejado">
                             <small id="helpId" class="form-text text-muted"> Escolha um horário </small>
                         </div>
 
-                        <div class="col-span-6 sm:col-span-3">
-                            <label for="timeSesion"
-                                class="block text-sm font-medium leading-5 text-gray-700">Duração</label>
-                            <select v-model="form.session" id="timeSesion"
-                                class="mt-1 block form-select w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:shadow-outline-blue focus:border-blue-300 transition duration-150 ease-in-out sm:text-sm sm:leading-5">
-                                <option value="900">15 minutos</option>
-                                <option value="1800">30 minutos</option>
-                                <option value="3600">1 hora</option>
-                            </select>
+                         <div class="form-group mt-2"">
+                            <label for="inputEmail3">Hora de Inicio</label>
+                            <input type="text" class="form-control" name="start" id="start" onKeyPress="DataHora(event, this)">
                         </div>
 
-                        <div class="form-group">
-                            <label for="start">Iniciar</label>
-                            <input type="datetime-local" class="form-control date-time" name="start"
-                                id="start">
+                        <div class="form-group mt-2"">
+                            <label for="inputEmail3">Hora Final</label>
+                            <input type="text" class="form-control" name="end" id="end" onKeyPress="DataHora(event, this)">
                         </div>
 
-                        <div class="form-group">
-                            <label for="end">Fim</label>
-                            <input type="datetime-local" class="form-control date-time" name="end"
-                                id="end">
-                        </div>
+                        {{-- <div class="form-group mt-2" >
+                            <label for="time">Tempo de atendimento</label>
+                            <select type="hidden" id="horaAtendimento">
+                                <option value"1"> 1 Hora </option>
+                        </div> --}}
 
-                        <div class="form-group">
-                            <label for="color">Cor</label>
+                        <div class="form-group mt-2"">
+                            <label for="cor">Cor</label>
                             <input type="color" class="form-control" name="color" id="color"
                                 aria-describedby="helpId">
                         </div>
 
                         <div class="form-group mt-2">
                             <textarea class="form-control" name="description" id="description" cols="80" rows="5"
-                                placeholder="Observação"></textarea>
+                                placeholder="Observação ou corte desejado"></textarea>
                         </div>
+
+
                         <div class="modal-footer">
                             <button type="submit" class="btn btn-success saveEvent" id="btnSalvar">Salvar</button>
                             <button type="submit" class="btn btn-warning" id="btnEditar">Editar</button>
@@ -251,13 +225,14 @@
 
                     </form>
                 </div>
-
-
-
-
             </div>
         </div>
     </div>
+
+    <?php
+
+
+    ?>
 
 
 
@@ -270,16 +245,50 @@
             font-size: 14px;
         }
 
-        #agenda {
+        #calendario0 {
             max-width: 900px;
             margin: 0 auto;
         }
+
+        .fc-timegrid-slot-lane:hover{
+            background-color: rgba(188,232,241,0.3);
+            cursor: pointer;
+        }
+
+        .fc-daygrid-day.fc-day-future:hover{
+            background-color: rgba(188,232,241,0.3);
+            cursor: pointer;
+        }
+        .fc-timegrid-col-events{
+            margin: 0!important;
+
+
+        }
+        .fc-timegrid-event {
+            margin: 0!important;
+        }
+        .fc-timegrid-title{
+            font-size: 18px;
+            font-weight: bold;
+            color: black;
+        }
+        .fc-daygrid-event.fc-event-end{
+            margin-right: 2!important;
+        }
+
+        .fc-daygrid-event.fc-daygrid-block-event.fc-h-event.fc-event.fc-event-draggable.fc-event-resizable.fc-event-end.fc-event-today{
+            margin-right: 0px;
+            margin-left: 0px;
+        }
+
+
+
     </style>
 
     <div class="container py-4">
         <div class="row">
             <div class="col">
-                <h3 class="display-7 text-secondary d-none d-md-block"><b></b></h3>
+                <h3 class="display-7 text-secondary d-none d-md-block"><b>{{ $titulo }}</b></h3>
             </div>
             @if (isset($rota))
                 <div class="col d-flex justify-content-end">
@@ -367,6 +376,10 @@
     integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 <link href='css/core/main.min.css' rel='stylesheet' />
 <link href='css/daygrid/main.min.css' rel='stylesheet' />
+<link href='css/fullcalendar.min.css' rel='stylesheet' />
+
+
+
 <script src='js/core/main.min.js'></script>
 <script src='js/interaction/main.min.js'></script>
 <script src='js/daygrid/main.min.js'></script>
@@ -384,9 +397,28 @@
 <!-- JQuery / JS -->
 <script src="{{ asset('js/jquery-3.6.0.min.js') }}"></script>
 <!-- Scrip Calendario / JS -->
-<script src="{{ asset('js/script.js') }}" defer></script>
+
 <!-- Agenda / JS -->
-<script src="{{ asset('js/tarefas.js') }}" defer></script>
+
+<script src="{{ asset('js/calendario.js') }}" defer></script>
+<script src="{{ asset('js/calendario1.js') }}" defer></script>
+<script src="{{ asset('js/calendario2.js') }}" defer></script>
+<script src="{{ asset('js/calendario3.js') }}" defer></script>
+
+<script src="{{ asset('js/moment.min.js') }}" defer></script>
+<script src="{{ asset('js/fullcalendar.min.js') }}" defer></script>
+
+<!-- Agenda CELKE / JS -->
+<link href='css/bootstrap.min.css' rel='stylesheet'>
+<link href='css/fullcalendar.min.css' rel='stylesheet' />
+<link href='css/fullcalendar.print.min.css' rel='stylesheet' media='print' />
+<link href='css/personalizado.css' rel='stylesheet' />
+<script src='js/jquery.min.js'></script>
+<script src='js/bootstrap.min.js'></script>
+<script src='js/moment.min.js'></script>
+<script src='js/fullcalendar.min.js'></script>
+<script src='locale/pt-br.js'></script>
+
 
 <!-- Agenda Estilos / JS -->
 

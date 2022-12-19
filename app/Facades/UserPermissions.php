@@ -4,28 +4,26 @@ namespace App\Facades;
 
 use App\Models\Permission;
 
-class UserPermissions {
+class UserPermissions
+{
+    public static function loadPermissions($user_type)
+    {
+        $sess = array();
 
-    public static function loadPermissions($user_type) {
+        $perm = Permission::with('resource')->where('type_id', $user_type)->get();
 
-        $sess = Array();
-        $perm = Permission::where('type_id', $user_type)->get();
-
-        foreach($perm as $item) {
-            $sess[$item->regra] = (boolean) $item->permissao;
+        foreach ($perm as $item) {
+            $sess[$item->resource->name] = (bool) $item->permissao;
         }
         session(['user_permissions' => $sess]);
     }
-
-    public static function isAuthorized($rule) {
-
+    public static function isAuthorized($resource)
+    {
         $permissions = session('user_permissions');
-
-
-        return $permissions[$rule];
+        return $permissions[$resource];
     }
-
-    public static function test() {
+    public static function test()
+    {
         return "<h1>UserPermissionsFacade - Running!!</h1>";
     }
 }

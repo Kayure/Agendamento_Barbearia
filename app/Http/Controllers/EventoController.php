@@ -7,6 +7,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use App\Models\Eixo;
 use Illuminate\Support\Facades\Auth;
+use App\Facades\UserPermissions;
 
 class EventoController extends Controller
 {
@@ -43,15 +44,21 @@ class EventoController extends Controller
     public function store(Request $request)
     {
 
+        $dados = filter_input_array(INPUT_POST, FILTER_DEFAULT);
+
+
 
         $event = new Evento();
 
+        //NEM USEI
+
         $event->title = $request->title;
-        $event->start = $request->start;
-        $event->end = $request->end;
+        $event->start = $request->data_start_conv;
+        $event->end = $request->data_end_conv;
         $event->color = $request->color;
         $event->description = $request->description;
         $event->user_id = Auth::user()->id;
+        $event->finished = 0;
 
         $event->save();
 
@@ -99,33 +106,48 @@ class EventoController extends Controller
      * @return \Illuminate\Http\Response
      *
      */
-    public function destroy(Evento $evento)
+    public function destroy($id)
     {
-        //
+        if(!UserPermissions::isAuthorized('eventos.destroy')) {
+            return response()->view('templates.restrito');
+        }
+
+        $obj = Evento::find($id);
+
+        if (isset($obj)) {
+            $obj->delete();
+        } else {
+            $msg = "Curso";
+            $link = "cursos.index";
+            return view('erros.id', compact(['msg', 'link']));
+        }
+
+        return redirect()->route('tarefas.index');
     }
 
 
     //FUNÇÃO QUE ERA PRA CARREGAR EVENTOS MAS N FUNCIONOU
-    public function loadEvents( )
+    public function loadEvents( Request $request )
     {
 
         {
 
 
             //FUNÇÃO QUE CARREGA APENAS ALGUMAS DATAS DO BANCO
-            // $returnedColumns = ['id', 'title', 'start', 'end', 'color', 'description'];
-            // $start = (!empty($request->start)) ? ($request->start) : ('');
-            // $end = (!empty($request->end)) ? ($request->end) : ('');
-            //  /** Retornaremos apenas os eventos ENTRE as datas iniciais e finais visiveis no calendário */
-            // $events = Evento::whereBetween('start', [$start, $end])->get($returnedColumns);
+             $returnedColumns = ['id', 'title', 'start', 'end', 'color', 'description'];
+             $start = (!empty($request->start)) ? ($request->start) : ('');
+             $end = (!empty($request->end)) ? ($request->end) : ('');
+              /** Retornaremos apenas os eventos ENTRE as datas iniciais e finais visiveis no calendário */
+             $events = Evento::whereBetween('start', [$start, $end])->get($returnedColumns);
+
+
 
 
 
 
 
             //FUNÇÃO QUE PUXA TUDO DO BANCO
-
-          $events = Evento::all();
+            //$events = Evento::all();
 
             return response () ->json ($events);
 

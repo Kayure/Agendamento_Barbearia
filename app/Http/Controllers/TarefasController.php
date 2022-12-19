@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use App\Models\Professor;
 use App\Models\Disciplina;
 use App\Models\Docencia;
+use App\Models\Evento;
+use App\Facades\UserPermissions;
 
 
 class TarefasController extends Controller
@@ -15,16 +17,18 @@ class TarefasController extends Controller
 
     public function index()
     {
+        // if(!UserPermissions::isAuthorized('tarefas.index')) {
+        //     return response()->view('templates.restrito');
+        // }
 
-        
-        // $cursos  = Curso::with(['eixo']);
+        $data = Evento::with(['user'])->orderBy('start')->get();
 
-        // $disciplinas = Disciplina::with(['curso'])
-        //     ->orderBy('curso_id')->orderBy('id')->get();
 
-        // $profs = Professor::orderBy('id')->get();
 
-        return view('tarefas.index');
+
+
+
+        return view('tarefas.index', compact(['data']));
     }
 
     public function create(Request $request)
@@ -34,35 +38,13 @@ class TarefasController extends Controller
     public function store(Request $request)
     {
 
-        $rules = [
-            'PROFESSOR_ID_SELECTED' => 'required',
-        ];
-        $msgs = [
-            "required" => "O preenchimento do campo [:attribute] é obrigatório!",
-            "max" => "O campo [:attribute] possui tamanho máximo de [:max] caracteres!",
-            "min" => "O campo [:attribute] possui tamanho mínimo de [:min] caracteres!",
-        ];
 
-        $request->validate($rules, $msgs);
+    }
 
-        $ids_prof = $request->PROFESSOR_ID_SELECTED;
-        $disciplina = $request->DISCIPLINA;
+    public function finalizar(Request $request)
+    {
 
 
-        for ($i = 0; $i < count($request->DISCIPLINA); $i++) {
-
-            Docencia::where('disciplina_id', '=', $disciplina[$i])->where('professor_id', '=', $ids_prof[$i])->delete();
-
-            $doc = new Docencia();
-
-            $doc->professor_id = $ids_prof[$i];
-            $doc->disciplina_id = $disciplina[$i];
-
-            $doc->save();
-        }
-
-
-        return redirect()->route('disciplinas.index');
     }
 
 
@@ -84,7 +66,19 @@ class TarefasController extends Controller
      */
     public function edit($id)
     {
-        //
+
+
+        $data = Evento::find($id);
+
+
+
+
+        if (isset($item)) {
+            $item->finished == 1;
+        } else {
+
+            return view('tarefas.index');
+        }
     }
 
     /**
@@ -107,6 +101,16 @@ class TarefasController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $obj = Evento::find($id);
+
+        if (isset($obj)) {
+            $obj->delete();
+        } else {
+            $msg = "Evento";
+            $link = "tarefas.index";
+            return view('erros.id', compact(['msg', 'link']));
+        }
+
+        return redirect()->route('tarefas.index');
     }
 }

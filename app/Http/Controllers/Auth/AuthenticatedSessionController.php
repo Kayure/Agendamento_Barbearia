@@ -9,6 +9,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\PermissionController;
 use App\Facades\UserPermissions;
+use App\Events\HomeEvent;
+
+
 
 class AuthenticatedSessionController extends Controller
 {
@@ -28,17 +31,14 @@ class AuthenticatedSessionController extends Controller
      * @param  \App\Http\Requests\Auth\LoginRequest  $request
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function store(LoginRequest $request)
-    {
+    public function store(LoginRequest $request) {
         $request->authenticate();
-
         $request->session()->regenerate();
-
-        // Carregando as Permissões do Usuário / Sessão
-        UserPermissions::loadPermissions(Auth::user()->type_id);
-
+        // Linha Adicionada - Registra o Evento HomeEvent
+        event(new HomeEvent("Parâmetro Evento"));
         return redirect()->intended(RouteServiceProvider::HOME);
-    }
+        }
+
 
     /**
      * Destroy an authenticated session.

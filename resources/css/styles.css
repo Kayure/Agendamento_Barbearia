@@ -2177,6 +2177,11 @@ progress {
   font-size: 1.25rem;
 }
 
+#calendario2 {
+    max-width: 1100px;
+    margin: 40px auto;
+  }
+
 .col-form-label-sm {
   padding-top: calc(0.25rem + 1px);
   padding-bottom: calc(0.25rem + 1px);
