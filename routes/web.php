@@ -20,24 +20,9 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-//ROTA INICIAL, ONDE TEM O CALENDARIO 0
+//ROTA INICIAL, ONDE TEM O CALENDARIO
 Route::get('/dashboard', function () {
     return view('templates.dashboard')->with('titulo', "");
-})->middleware(['auth'])->name('dashboard');
-
-//ROTA INICIAL, ONDE TEM O CALENDARIO 1
-Route::get('/calendario1', function () {
-    return view('templates.calendario1')->with('titulo', "");
-})->middleware(['auth'])->name('calendario1');
-
-//ROTA INICIAL, ONDE TEM O CALENDARIO 2
-Route::get('/calendario0', function () {
-    return view('templates.calendario0')->with('titulo', "");
-})->middleware(['auth'])->name('dashboard');
-
-//ROTA INICIAL, ONDE TEM O CALENDARIO 3
-Route::get('/calendario3', function () {
-    return view('templates.calendario3')->with('titulo', "");
 })->middleware(['auth'])->name('dashboard');
 
 

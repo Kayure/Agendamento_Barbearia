@@ -59,16 +59,7 @@
 
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a href="{{ route('templates.dashboard') }}" class="dropdown-item">Pedro</a></li>
-
-                            <li><a href="{{ url('/calendario0') }}" class="dropdown-item">Calendario 0, [PRINCIPAL] </a></li>
-                            <li><a href="{{ url('/calendario1') }}" class="dropdown-item">Calendario 1</a></li>
-                            <li><a href="{{ url('/calendario2') }}" class="dropdown-item">Calendario 2</a></li>
-
-
-
-
-
+                            <li><a href="" class="dropdown-item">Pedro</a></li>
 
 
 
@@ -117,15 +108,8 @@
 
     {{-- INCIALIZAÇÃO DO CALENDARIO --}}
     <div class="container">
-        <div id="calendario0" data-route-load-events="{{ route('routeLoadEvents') }}"
+        <div id="calendar" data-route-load-events="{{ route('routeLoadEvents') }}"
             data-route-load-store="{{ route('routeEventStore') }}">
-
-
-        </div>
-    </div>
-
-     {{-- INCIALIZAÇÃO DO CALENDARIO 2 --}}
-     <<div id='calendario2'></div>
 
 
         </div>

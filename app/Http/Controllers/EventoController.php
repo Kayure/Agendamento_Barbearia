@@ -44,17 +44,28 @@ class EventoController extends Controller
     public function store(Request $request)
     {
 
-        $dados = filter_input_array(INPUT_POST, FILTER_DEFAULT);
 
+    //    $_GET['date'];
+    //$start = new \DateTime($_GET['date'], new \DateTimeZone('America/Sao_Paulo'));
+
+        //DEFINE A HORA DE ATENDIMENTO
+        $horaAtendimento =1;
+
+        //DEFINE QUE A HORA FINAL É A HORA INICIAL + 1 HORA
+        //$end =$start->modify('+'.$horaAtendimento.'hours');
 
 
         $event = new Evento();
 
         //NEM USEI
 
+
+
+
         $event->title = $request->title;
-        $event->start = $request->data_start_conv;
-        $event->end = $request->data_end_conv;
+        $event->start = $request->start;
+        $event->end = $request->end;
+        // $event->end = $request->$end;
         $event->color = $request->color;
         $event->description = $request->description;
         $event->user_id = Auth::user()->id;
