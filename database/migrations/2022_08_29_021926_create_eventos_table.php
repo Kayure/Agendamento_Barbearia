@@ -18,14 +18,12 @@ class CreateEventosTable extends Migration
             $table->string('title');
             $table->dateTime('start');
             $table->dateTime('end');
-            $table->string('color', length: 7);
+            $table->string('color');
             $table->longText('description')->nullable();
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users');
 
-
             $table->timestamps();
-            $table->softDeletes();
         });
     }
 

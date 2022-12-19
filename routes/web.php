@@ -21,23 +21,21 @@ Route::get('/', function () {
 });
 
 Route::get('/dashboard', function () {
-    return view('templates.middleware')->with('titulo', "");
+    return view('templates.dashboard')->with('titulo', "");
 })->middleware(['auth'])->name('dashboard');
 
 Route::resource('/cursos', '\App\Http\Controllers\CursoController')
     ->middleware(['auth']);
 
 
-Route::resource('/eixos', '\App\Http\Controllers\EixoController');
-Route::resource('/disciplinas', '\App\Http\Controllers\DisciplinaController')->middleware(['auth']);
-Route::resource('/professores', '\App\Http\Controllers\ProfessorController')->middleware(['auth']);
-Route::resource('/alunos', '\App\Http\Controllers\AlunoController')->middleware(['auth']);
-Route::resource('/matriculas', '\App\Http\Controllers\MatriculaController')->middleware(['auth']);
-Route::resource('/docencias', '\App\Http\Controllers\DocenciaController')->middleware(['auth']);
+
 
 //ROTAS BARBEARIA
 Route::resource('/clientes', '\App\Http\Controllers\ClienteController');
 Route::resource('/servicos', '\App\Http\Controllers\ServicosController');
+Route::resource('/evento', '\App\Http\Controllers\EventoController');
+
+
 
 // Google Login
 Route::get('auth/google', [GoogleAuthController::class,'redirect'])->name('google-auth');
@@ -50,10 +48,12 @@ Route::get('auth/facebook/call-back', [FaceBookController::class, 'callbackFaceb
 
 //Rota calendario
 Route::get('/evento', [\App\Http\Controllers\EventoController::class, 'index']);
-Route::get('/load-events','EventoController@loadEvents')->name('routeLoadEvents');
-Route::post('/event-store','EventoController@store')->name('routeEventStore');
 
+Route::post('/event-store','\App\Http\Controllers\EventoController@store')->name('routeEventStore');
+Route::resource('/tarefas', '\App\Http\Controllers\TarefasController');
 
+//Rota para carregar os eventos no calendario
+Route::get('/load-events', '\App\Http\Controllers\EventoController@loadEvents')->name('routeLoadEvents');
 
 
 

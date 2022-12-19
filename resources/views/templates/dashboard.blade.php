@@ -7,10 +7,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <!-- Define uma seção "titulo" -->
-    <title>IFPR Gestão @yield('titulo')</title>
+    <title>Barbearia Seu Pedro @yield('titulo')</title>
+    <link rel="icon" type="image/x-icon" href="img/favicon.png" />
 
-    <!-- Bootstrap 5 / CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
 
 
 </head>
@@ -59,8 +59,8 @@
 
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a href="{{ route('professores.index') }}" class="dropdown-item">Pedro</a></li>
-                            <li><a href="{{ route('professores.index') }}" class="dropdown-item">Fulano</a></li>
+                            <li><a href="" class="dropdown-item">Pedro</a></li>
+                            <li><a href="" class="dropdown-item">Fulano</a></li>
 
 
                         </ul>
@@ -128,12 +128,99 @@
             </div>
         </div>
     </nav>
+
+    {{-- INCIALIZAÇÃO DO CALENDARIO --}}
+    <div class="container">
+        <div id="calendario"
+        data-route-load-events="{{ route('routeLoadEvents') }}"
+        data-route-load-store="{{ route('routeEventStore') }}">
+
+        </div>
+    </div>
+
+
+    <!-- Modal -->
+    <div class="modal fade" id="modalCalendar" tabindex="-1" role="dialog" aria-labelledby="titleModal" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="titleModal">Escolha um horário</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form action="{{ route('evento.store') }}" method="POST">
+                        @csrf
+                        <div class="form-group">
+                            <label for="title">Tipo de serviço</label>
+                            <input type="text" class="form-control" name="title" id="title" aria-describedby="" placeholder="Corte/Barba/Sobrancelha">
+                            <small id="helpId" class="form-text text-muted"> Escolha um horário </small>
+                        </div>
+
+                        <div class="col-span-6 sm:col-span-3">
+                            <label for="timeSesion" class="block text-sm font-medium leading-5 text-gray-700">Duração</label>
+                            <select v-model="form.session" id="timeSesion" class="mt-1 block form-select w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:shadow-outline-blue focus:border-blue-300 transition duration-150 ease-in-out sm:text-sm sm:leading-5">
+                                <option value="900">15 minutos</option>
+                                <option value="1800">30 minutos</option>
+                                <option value="3600">1 hora</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="start">Iniciar</label>
+                            <input type="datetime-local" class="form-control date-time" name="start" id="start">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="end">Fim</label>
+                            <input type="datetime-local" class="form-control date-time" name="end" id="end">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="color">Cor</label>
+                            <input type="color" class="form-control" name="color" id="color" aria-describedby="helpId">
+                        </div>
+
+                        <div class="form-group mt-2">
+                            <textarea class="form-control" name="description" id="description" cols="80" rows="5" placeholder="Observação"></textarea>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-success saveEvent" id="btnSalvar">Salvar</button>
+                            <button type="submit" class="btn btn-warning" id="btnEditar">Editar</button>
+                            <button type="submit" class="btn btn-danger deleteEvent" id="btnExcluir">Excluir</button>
+                        </div>
+
+                    </form>
+                </div>
+
+
+
+
+            </div>
+        </div>
+    </div>
+
+    <style>
+        body {
+            margin: 40px 10px;
+            padding: 0;
+
+            font-size: 14px;
+        }
+
+        #agenda {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+    </style>
+
     <div class="container py-4">
         <div class="row">
             <div class="col">
-
+                <h3 class="display-7 text-secondary d-none d-md-block"><b>{{ $titulo }}</b></h3>
             </div>
-            @if(isset($rota))
+            @if (isset($rota))
             <div class="col d-flex justify-content-end">
 
                 <a href="{{ route($rota) }}" class="btn btn-dark">
@@ -154,6 +241,9 @@
         </div>
     </nav>
 </body>
+
+
+
 
 <div class="modal fade" tabindex="-1" id="infoModal">
     <div class="modal-dialog">
@@ -201,13 +291,34 @@
     </div>
 </div>
 
+<!-- Bootstrap 5 / CSS -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+<link href='css/core/main.min.css' rel='stylesheet' />
+<link href='css/daygrid/main.min.css' rel='stylesheet' />
+<script src='js/core/main.min.js'></script>
+<script src='js/interaction/main.min.js'></script>
+<script src='js/daygrid/main.min.js'></script>
+<script src='js/core/locales/pt-br.js'></script>
+
+<!-- Inclusao do Full Calendar-->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.css">
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/locales-all.js"></script>
+
 <!-- Bootstrap 5 / JS -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous">
+</script>
 <!-- JQuery / JS -->
 <script src="{{ asset('js/jquery-3.6.0.min.js') }}"></script>
+<!-- Scrip Calendario / JS -->
+<script src="{{ asset('js/script.js') }}" defer></script>
+<!-- Agenda / JS -->
+<script src="{{ asset('js/calendario.js') }}" defer></script>
+
+<!-- Agenda Estilos / JS -->
 
 <script type="text/javascript">
-    function showInfoModal(nome) {
+    function showInfoModal(data, fields) {
         data = JSON.parse(data)
         fields = JSON.parse(fields)
         $('#infoModal').modal().find('.modal-body').html("");
@@ -216,18 +327,23 @@
         }
         $("#infoModal").modal('show');
     }
+
     function closeInfoModal() {
         $("#infoModal").modal('hide');
     }
+
     function showRemoveModal(id, nome) {
         $('#id_remove').val(id);
         $('#removeModal').modal().find('.modal-body').html("");
-        $('#removeModal').modal().find('.modal-body').append("Deseja remover o registro <b class='text-danger'>'" + nome + "'</b> ?");
+        $('#removeModal').modal().find('.modal-body').append("Deseja remover o registro <b class='text-danger'>'" +
+            nome + "'</b> ?");
         $("#removeModal").modal('show');
     }
+
     function closeRemoveModal() {
         $("#removeModal").modal('hide');
     }
+
     function remove() {
         let id = $('#id_remove').val();
         let form = "form_" + $('#id_remove').val();
